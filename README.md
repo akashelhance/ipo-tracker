@@ -1,36 +1,123 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# IPO Calendar - Next.js Application
+
+A comprehensive IPO tracking and financial calculator application built with Next.js 15, TypeScript, and Tailwind CSS.
+
+## Features
+
+- 📊 **IPO Calendar**: Track upcoming and current IPOs
+- 💰 **Grey Market Premium (GMP)**: Real-time GMP data
+- 📈 **Subscription Status**: IPO subscription tracking
+- 🔄 **Share Buyback Offers**: Complete buyback information
+- 🧮 **Financial Calculators**: SIP, Lumpsum, FD, PPF, RD, NPS calculators
+- 📱 **Responsive Design**: Mobile-first approach
+- 🔍 **SEO Optimized**: Complete SEO implementation
+- 📝 **Blog System**: Content management system
+- 🏢 **Broker Comparison**: Stock broker comparison tools
+
+## Tech Stack
+
+- **Framework**: Next.js 15
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **Icons**: Lucide React
+- **Charts**: Chart.js with React Chart.js 2
+- **Date Handling**: date-fns
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
+- Node.js 18+ 
+- npm or yarn
+
+### Installation
+
+1. Clone the repository:
+\`\`\`bash
+git clone <repository-url>
+cd ipo-calendar
+\`\`\`
+
+2. Install dependencies:
+\`\`\`bash
+npm install
+\`\`\`
+
+3. Start the development server:
+\`\`\`bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+\`\`\`
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Available Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+\`\`\`
+├── app/                    # Next.js app directory
+│   ├── (pages)/           # Route groups
+│   ├── api/               # API routes
+│   └── globals.css        # Global styles
+├── components/            # Reusable components
+├── lib/                   # Utility functions and data
+├── public/               # Static assets
+└── types/                # TypeScript type definitions
+\`\`\`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Key Pages
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `/` - Homepage with IPO overview
+- `/upcoming-ipo-calendar` - IPO calendar
+- `/ipo-subscription-status` - Subscription tracking
+- `/ipo-grey-market-premium` - GMP data
+- `/share-buyback-offers` - Buyback offers
+- `/calculators/*` - Financial calculators
+- `/blog` - Blog system
+- `/stock-brokers-comparison` - Broker comparison
 
-## Deploy on Vercel
+## Configuration
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Tailwind CSS
+The project uses a custom Tailwind configuration with:
+- Custom color palette
+- Extended animations
+- Responsive breakpoints
+- Typography plugin
+- Forms plugin
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Next.js
+Configured with:
+- TypeScript support
+- Image optimization
+- ESLint integration
+- Experimental package imports optimization
+
+## SEO Features
+
+- Dynamic meta tags
+- Structured data
+- XML sitemap generation
+- Open Graph tags
+- Twitter Card support
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Run tests and linting
+5. Submit a pull request
+
+## License
+
+This project is licensed under the MIT License.
+
+## Support
+
+For support, please contact the development team or create an issue in the repository.

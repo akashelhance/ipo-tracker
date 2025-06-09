@@ -1,0 +1,138 @@
+export interface Broker {
+  id: number
+  slug: string
+  name: string
+  logo: string
+  type: "Discount" | "Full-Service"
+  accountOpeningCharge: string
+  accountMaintenanceCharge: string
+  equityDeliveryBrokerage: string
+  equityIntradayBrokerage: string
+  openAccountUrl: string
+  rating: number
+  features: string[]
+  description: string
+}
+
+export const brokers: Broker[] = [
+  {
+    id: 1,
+    slug: "zerodha",
+    name: "Zerodha",
+    logo: "/placeholder.svg?height=60&width=120",
+    type: "Discount",
+    accountOpeningCharge: "₹0",
+    accountMaintenanceCharge: "₹300/year",
+    equityDeliveryBrokerage: "₹0",
+    equityIntradayBrokerage: "₹20 or 0.03%",
+    openAccountUrl: "https://zerodha.com/open-account",
+    rating: 4.5,
+    features: ["Zero brokerage on delivery", "Advanced trading platforms", "Educational content"],
+    description: "India's largest discount broker with zero brokerage on equity delivery trades.",
+  },
+  {
+    id: 2,
+    slug: "upstox",
+    name: "Upstox",
+    logo: "/placeholder.svg?height=60&width=120",
+    type: "Discount",
+    accountOpeningCharge: "₹0",
+    accountMaintenanceCharge: "₹150/year",
+    equityDeliveryBrokerage: "₹0",
+    equityIntradayBrokerage: "₹20 or 0.05%",
+    openAccountUrl: "https://upstox.com/open-account",
+    rating: 4.3,
+    features: ["Zero delivery brokerage", "Mobile-first platform", "API trading"],
+    description: "Technology-driven discount broker with competitive pricing and modern platforms.",
+  },
+  {
+    id: 3,
+    slug: "angel-one",
+    name: "Angel One",
+    logo: "/placeholder.svg?height=60&width=120",
+    type: "Full-Service",
+    accountOpeningCharge: "₹0",
+    accountMaintenanceCharge: "₹240/year",
+    equityDeliveryBrokerage: "₹0",
+    equityIntradayBrokerage: "₹20 or 0.25%",
+    openAccountUrl: "https://angelone.in/open-account",
+    rating: 4.2,
+    features: ["Research reports", "Advisory services", "Multiple trading platforms"],
+    description: "Full-service broker offering comprehensive research and advisory services.",
+  },
+  {
+    id: 4,
+    slug: "icici-direct",
+    name: "ICICI Direct",
+    logo: "/placeholder.svg?height=60&width=120",
+    type: "Full-Service",
+    accountOpeningCharge: "₹975",
+    accountMaintenanceCharge: "₹975/year",
+    equityDeliveryBrokerage: "0.55%",
+    equityIntradayBrokerage: "0.05%",
+    openAccountUrl: "https://icicidirect.com/open-account",
+    rating: 4.1,
+    features: ["Banking integration", "Research reports", "Wealth management"],
+    description: "Established full-service broker with strong research and banking integration.",
+  },
+  {
+    id: 5,
+    slug: "hdfc-securities",
+    name: "HDFC Securities",
+    logo: "/placeholder.svg?height=60&width=120",
+    type: "Full-Service",
+    accountOpeningCharge: "₹999",
+    accountMaintenanceCharge: "₹750/year",
+    equityDeliveryBrokerage: "0.50%",
+    equityIntradayBrokerage: "0.05%",
+    openAccountUrl: "https://hdfcsec.com/open-account",
+    rating: 4.0,
+    features: ["Premium research", "Relationship manager", "Banking services"],
+    description: "Premium full-service broker with personalized advisory and research.",
+  },
+  {
+    id: 6,
+    slug: "groww",
+    name: "Groww",
+    logo: "/placeholder.svg?height=60&width=120",
+    type: "Discount",
+    accountOpeningCharge: "₹0",
+    accountMaintenanceCharge: "₹0",
+    equityDeliveryBrokerage: "₹0",
+    equityIntradayBrokerage: "₹20 or 0.05%",
+    openAccountUrl: "https://groww.in/open-account",
+    rating: 4.4,
+    features: ["Zero AMC", "Simple interface", "Mutual fund platform"],
+    description: "User-friendly discount broker with zero account maintenance charges.",
+  },
+  {
+    id: 7,
+    slug: "5paisa",
+    name: "5paisa",
+    logo: "/placeholder.svg?height=60&width=120",
+    type: "Discount",
+    accountOpeningCharge: "₹0",
+    accountMaintenanceCharge: "₹200/year",
+    equityDeliveryBrokerage: "₹10",
+    equityIntradayBrokerage: "₹10",
+    openAccountUrl: "https://5paisa.com/open-account",
+    rating: 4.0,
+    features: ["Flat fee structure", "Multiple platforms", "Research tools"],
+    description: "Affordable discount broker with flat fee pricing across all segments.",
+  },
+  {
+    id: 8,
+    slug: "sharekhan",
+    name: "Sharekhan",
+    logo: "/placeholder.svg?height=60&width=120",
+    type: "Full-Service",
+    accountOpeningCharge: "₹500",
+    accountMaintenanceCharge: "₹500/year",
+    equityDeliveryBrokerage: "0.50%",
+    equityIntradayBrokerage: "0.25%",
+    openAccountUrl: "https://sharekhan.com/open-account",
+    rating: 3.9,
+    features: ["Branch network", "Research team", "Advisory services"],
+    description: "Traditional full-service broker with extensive branch network and research.",
+  },
+]
