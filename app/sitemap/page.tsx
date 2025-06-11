@@ -1,17 +1,17 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { TrendingUp, BarChart2, Award, Users, BookOpen, Shield, Gift } from "lucide-react"
+import { TrendingUp, BarChart2, Award, Users, BookOpen, Shield, Gift, Calculator } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "Sitemap | IPOTracker",
   description:
-    "Navigate through all sections and pages of IPOTracker. Find information about IPOs, buybacks, subscription status, and more.",
+    "Navigate through all sections and pages of IPOTracker. Find information about IPOs, buybacks, subscription status, calculators, and more.",
 }
 
 export default function SitemapPage() {
   return (
     <main className="container mx-auto px-4 py-12">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <div className="mb-10 text-center">
           <h1 className="text-3xl md:text-4xl font-bold mb-4">Sitemap</h1>
           <p className="text-gray-600 max-w-2xl mx-auto">
@@ -43,9 +43,9 @@ export default function SitemapPage() {
                 </Link>
               </li>
               <li>
-                <Link href="/sme-ipos" className="text-blue-600 hover:underline flex items-center">
+                <Link href="/sme-ipo-calendar" className="text-blue-600 hover:underline flex items-center">
                   <span className="w-1.5 h-1.5 bg-blue-600 rounded-full mr-2"></span>
-                  SME IPOs
+                  SME IPO Calendar
                 </Link>
               </li>
               <li>
@@ -64,6 +64,90 @@ export default function SitemapPage() {
                 <Link href="/allotment-status" className="text-blue-600 hover:underline flex items-center">
                   <span className="w-1.5 h-1.5 bg-blue-600 rounded-full mr-2"></span>
                   Allotment Status
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Investment Calculators */}
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div className="flex items-center mb-4">
+              <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-3">
+                <Calculator className="h-5 w-5 text-green-600" />
+              </div>
+              <h2 className="text-xl font-bold">Investment Calculators</h2>
+            </div>
+            <ul className="space-y-3">
+              <li>
+                <Link href="/calculators" className="text-blue-600 hover:underline flex items-center">
+                  <span className="w-1.5 h-1.5 bg-blue-600 rounded-full mr-2"></span>
+                  All Calculators
+                </Link>
+              </li>
+              <li>
+                <Link href="/calculators/sip" className="text-blue-600 hover:underline flex items-center">
+                  <span className="w-1.5 h-1.5 bg-blue-600 rounded-full mr-2"></span>
+                  SIP Calculator
+                </Link>
+              </li>
+              <li>
+                <Link href="/calculators/lumpsum" className="text-blue-600 hover:underline flex items-center">
+                  <span className="w-1.5 h-1.5 bg-blue-600 rounded-full mr-2"></span>
+                  Lumpsum Calculator
+                </Link>
+              </li>
+              <li>
+                <Link href="/calculators/fd" className="text-blue-600 hover:underline flex items-center">
+                  <span className="w-1.5 h-1.5 bg-blue-600 rounded-full mr-2"></span>
+                  FD Calculator
+                </Link>
+              </li>
+              <li>
+                <Link href="/calculators/ppf" className="text-blue-600 hover:underline flex items-center">
+                  <span className="w-1.5 h-1.5 bg-blue-600 rounded-full mr-2"></span>
+                  PPF Calculator
+                </Link>
+              </li>
+              <li>
+                <Link href="/calculators/rd" className="text-blue-600 hover:underline flex items-center">
+                  <span className="w-1.5 h-1.5 bg-blue-600 rounded-full mr-2"></span>
+                  RD Calculator
+                </Link>
+              </li>
+              <li>
+                <Link href="/calculators/nps" className="text-blue-600 hover:underline flex items-center">
+                  <span className="w-1.5 h-1.5 bg-blue-600 rounded-full mr-2"></span>
+                  NPS Calculator
+                </Link>
+              </li>
+              <li>
+                <Link href="/calculators/swp" className="text-blue-600 hover:underline flex items-center">
+                  <span className="w-1.5 h-1.5 bg-blue-600 rounded-full mr-2"></span>
+                  SWP Calculator
+                </Link>
+              </li>
+              <li>
+                <Link href="/calculators/retirement" className="text-blue-600 hover:underline flex items-center">
+                  <span className="w-1.5 h-1.5 bg-blue-600 rounded-full mr-2"></span>
+                  Retirement Calculator
+                </Link>
+              </li>
+              <li>
+                <Link href="/calculators/goal-based" className="text-blue-600 hover:underline flex items-center">
+                  <span className="w-1.5 h-1.5 bg-blue-600 rounded-full mr-2"></span>
+                  Goal Based Calculator
+                </Link>
+              </li>
+              <li>
+                <Link href="/calculators/elss" className="text-blue-600 hover:underline flex items-center">
+                  <span className="w-1.5 h-1.5 bg-blue-600 rounded-full mr-2"></span>
+                  ELSS Calculator
+                </Link>
+              </li>
+              <li>
+                <Link href="/calculators/tax-saving" className="text-blue-600 hover:underline flex items-center">
+                  <span className="w-1.5 h-1.5 bg-blue-600 rounded-full mr-2"></span>
+                  Tax Saving Calculator
                 </Link>
               </li>
             </ul>
@@ -102,8 +186,8 @@ export default function SitemapPage() {
           {/* Broker Services */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <div className="flex items-center mb-4">
-              <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-3">
-                <Users className="h-5 w-5 text-green-600" />
+              <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center mr-3">
+                <Users className="h-5 w-5 text-orange-600" />
               </div>
               <h2 className="text-xl font-bold">Broker Services</h2>
             </div>
@@ -135,19 +219,19 @@ export default function SitemapPage() {
             </ul>
           </div>
 
-          {/* Resources */}
+          {/* Resources & Blog */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <div className="flex items-center mb-4">
               <div className="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center mr-3">
                 <BookOpen className="h-5 w-5 text-yellow-600" />
               </div>
-              <h2 className="text-xl font-bold">Resources</h2>
+              <h2 className="text-xl font-bold">Resources & Blog</h2>
             </div>
             <ul className="space-y-3">
               <li>
-                <Link href="/blogs" className="text-blue-600 hover:underline flex items-center">
+                <Link href="/blog" className="text-blue-600 hover:underline flex items-center">
                   <span className="w-1.5 h-1.5 bg-blue-600 rounded-full mr-2"></span>
-                  Blogs
+                  Blog
                 </Link>
               </li>
               <li>
@@ -259,7 +343,7 @@ export default function SitemapPage() {
               <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center mr-3">
                 <Shield className="h-5 w-5 text-gray-600" />
               </div>
-              <h2 className="text-xl font-bold">Legal</h2>
+              <h2 className="text-xl font-bold">Legal & Sitemap</h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <Link href="/privacy-policy" className="text-blue-600 hover:underline flex items-center">

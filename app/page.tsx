@@ -323,14 +323,20 @@ export default function HomePage() {
               </div>
             </Link>
           </div>
+    <div className="text-center mt-8">
+  <Button
+    asChild
+    size="lg"
+    variant="outline"
+    className="px-8 py-3 text-gray-800 border-gray-300 hover:bg-gray-100"
+  >
+    <Link href="/calculators">
+      View All Calculators <span className="ml-2">→</span>
+    </Link>
+  </Button>
+</div>
 
-          <div className="text-center mt-8">
-            <Button asChild size="lg" variant="outline" className="px-8 py-3">
-              <Link href="/calculators">
-                View All Calculators <span className="ml-2">→</span>
-              </Link>
-            </Button>
-          </div>
+   
         </div>
       </section>
 
@@ -442,13 +448,19 @@ export default function HomePage() {
             </Card>
           </div>
 
-          <div className="text-center mt-8">
-            <Button asChild size="lg" variant="outline" className="px-8 py-3">
-              <Link href="/blog">
-                View All Articles <span className="ml-2">→</span>
-              </Link>
-            </Button>
-          </div>
+         <div className="text-center mt-8">
+  <Button
+    asChild
+    size="lg"
+    variant="outline"
+    className="px-8 py-3 text-gray-800 border-gray-300 hover:bg-gray-100 hover:text-black"
+  >
+    <Link href="/blog">
+      View All Articles <span className="ml-2">→</span>
+    </Link>
+  </Button>
+</div>
+
         </div>
       </section>
 

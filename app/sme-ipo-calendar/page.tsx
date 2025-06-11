@@ -1,8 +1,20 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { Calendar, TrendingUp, Building2, MapPin } from "lucide-react"
+import {
+  Calendar,
+  TrendingUp,
+  Building2,
+  MapPin,
+  Calculator,
+  FileText,
+  Users,
+  BarChart3,
+  ExternalLink,
+  ChevronDown,
+} from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { CTAButton } from "@/components/cta-button"
 import { ipos } from "@/lib/ipo-data"
 
 export const metadata: Metadata = {
@@ -234,11 +246,306 @@ export default function SMEIpoCalendarPage() {
             </div>
           </div>
 
-          {/* CTA Section */}
+          {/* Explore More Investment Tools Section */}
+          <div className="mt-16">
+            <div className="text-center mb-12">
+              <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Explore More Investment Tools</h3>
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+                Discover our comprehensive suite of investment tools and resources to make informed decisions
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* IPO Calendar */}
+              <Link href="/upcoming-ipo-calendar" className="group">
+                <div className="bg-gradient-to-br from-blue-50 to-indigo-100 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-blue-100">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="p-3 bg-blue-600 rounded-xl">
+                      <Calendar className="h-6 w-6 text-white" />
+                    </div>
+                    <h4 className="text-xl font-bold text-gray-900">IPO Calendar</h4>
+                  </div>
+                  <p className="text-gray-600 mb-4">
+                    Track all upcoming IPOs with dates, price bands, and subscription details
+                  </p>
+                  <div className="flex items-center text-blue-600 font-semibold group-hover:text-blue-700">
+                    View Calendar <ExternalLink className="h-4 w-4 ml-2" />
+                  </div>
+                </div>
+              </Link>
+
+              {/* Subscription Status */}
+              <Link href="/ipo-subscription-status" className="group">
+                <div className="bg-gradient-to-br from-green-50 to-emerald-100 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-green-100">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="p-3 bg-green-600 rounded-xl">
+                      <BarChart3 className="h-6 w-6 text-white" />
+                    </div>
+                    <h4 className="text-xl font-bold text-gray-900">Subscription Status</h4>
+                  </div>
+                  <p className="text-gray-600 mb-4">Real-time IPO subscription data and oversubscription ratios</p>
+                  <div className="flex items-center text-green-600 font-semibold group-hover:text-green-700">
+                    Check Status <ExternalLink className="h-4 w-4 ml-2" />
+                  </div>
+                </div>
+              </Link>
+
+              {/* GMP */}
+              <Link href="/ipo-grey-market-premium" className="group">
+                <div className="bg-gradient-to-br from-purple-50 to-violet-100 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-purple-100">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="p-3 bg-purple-600 rounded-xl">
+                      <TrendingUp className="h-6 w-6 text-white" />
+                    </div>
+                    <h4 className="text-xl font-bold text-gray-900">Grey Market Premium</h4>
+                  </div>
+                  <p className="text-gray-600 mb-4">Latest GMP rates and market sentiment for upcoming IPOs</p>
+                  <div className="flex items-center text-purple-600 font-semibold group-hover:text-purple-700">
+                    View GMP <ExternalLink className="h-4 w-4 ml-2" />
+                  </div>
+                </div>
+              </Link>
+
+              {/* Calculators */}
+              <Link href="/calculators" className="group">
+                <div className="bg-gradient-to-br from-orange-50 to-amber-100 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-orange-100">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="p-3 bg-orange-600 rounded-xl">
+                      <Calculator className="h-6 w-6 text-white" />
+                    </div>
+                    <h4 className="text-xl font-bold text-gray-900">Investment Calculators</h4>
+                  </div>
+                  <p className="text-gray-600 mb-4">SIP, Lumpsum, FD, PPF and other financial calculators</p>
+                  <div className="flex items-center text-orange-600 font-semibold group-hover:text-orange-700">
+                    Use Calculators <ExternalLink className="h-4 w-4 ml-2" />
+                  </div>
+                </div>
+              </Link>
+
+              {/* Broker Comparison */}
+              <Link href="/stock-brokers-comparison" className="group">
+                <div className="bg-gradient-to-br from-teal-50 to-cyan-100 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-teal-100">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="p-3 bg-teal-600 rounded-xl">
+                      <Users className="h-6 w-6 text-white" />
+                    </div>
+                    <h4 className="text-xl font-bold text-gray-900">Broker Comparison</h4>
+                  </div>
+                  <p className="text-gray-600 mb-4">Compare brokerage charges, features and choose the best broker</p>
+                  <div className="flex items-center text-teal-600 font-semibold group-hover:text-teal-700">
+                    Compare Brokers <ExternalLink className="h-4 w-4 ml-2" />
+                  </div>
+                </div>
+              </Link>
+
+              {/* Blog */}
+              <Link href="/blog" className="group">
+                <div className="bg-gradient-to-br from-rose-50 to-pink-100 p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 border border-rose-100">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="p-3 bg-rose-600 rounded-xl">
+                      <FileText className="h-6 w-6 text-white" />
+                    </div>
+                    <h4 className="text-xl font-bold text-gray-900">Investment Blog</h4>
+                  </div>
+                  <p className="text-gray-600 mb-4">Latest market insights, IPO analysis and investment tips</p>
+                  <div className="flex items-center text-rose-600 font-semibold group-hover:text-rose-700">
+                    Read Articles <ExternalLink className="h-4 w-4 ml-2" />
+                  </div>
+                </div>
+              </Link>
+            </div>
+          </div>
+
+          {/* Zerodha CTA Section */}
+          <div className="mt-16 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-2xl p-8 text-white text-center">
+            <div className="max-w-3xl mx-auto">
+              <h3 className="text-3xl font-bold mb-4">Ready to Invest in SME IPOs?</h3>
+              <p className="text-xl mb-6 opacity-90">
+                Open your demat account with India's largest broker and start investing in SME IPOs with zero brokerage
+                on equity delivery trades
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-6">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                  <span>Zero brokerage on equity delivery</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                  <span>Advanced trading platforms</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                  <span>Trusted by 1.5+ crore investors</span>
+                </div>
+              </div>
+              <CTAButton size="lg" className="bg-white text-blue-600 hover:bg-gray-100" />
+            </div>
+          </div>
+
+          {/* FAQ Section */}
+          <div className="mt-16">
+            <div className="text-center mb-12">
+              <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h3>
+              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+                Get answers to common questions about SME IPOs and investing
+              </p>
+            </div>
+
+            <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+              <div className="divide-y divide-gray-100">
+                {/* FAQ 1 */}
+                <details className="group">
+                  <summary className="flex items-center justify-between p-6 cursor-pointer hover:bg-gray-50 transition-colors">
+                    <h4 className="text-lg font-semibold text-gray-900">
+                      What are SME IPOs and how do they differ from regular IPOs?
+                    </h4>
+                    <ChevronDown className="h-5 w-5 text-gray-500 group-open:rotate-180 transition-transform" />
+                  </summary>
+                  <div className="px-6 pb-6">
+                    <p className="text-gray-600">
+                      SME IPOs are Initial Public Offerings by Small and Medium Enterprises listed on the BSE SME
+                      platform. They differ from regular IPOs in terms of listing requirements, minimum investment
+                      amounts, and regulatory framework. SME IPOs typically have lower issue sizes, simplified
+                      compliance requirements, and are designed to help smaller companies raise capital for growth.
+                    </p>
+                  </div>
+                </details>
+
+                {/* FAQ 2 */}
+                <details className="group">
+                  <summary className="flex items-center justify-between p-6 cursor-pointer hover:bg-gray-50 transition-colors">
+                    <h4 className="text-lg font-semibold text-gray-900">How can I invest in SME IPOs?</h4>
+                    <ChevronDown className="h-5 w-5 text-gray-500 group-open:rotate-180 transition-transform" />
+                  </summary>
+                  <div className="px-6 pb-6">
+                    <p className="text-gray-600">
+                      To invest in SME IPOs, you need a demat account with a broker that provides access to BSE SME
+                      platform. You can apply through your broker's online platform, mobile app, or by submitting a
+                      physical application form. The application process is similar to regular IPOs, requiring you to
+                      specify the number of shares and bid price within the given price band.
+                    </p>
+                  </div>
+                </details>
+
+                {/* FAQ 3 */}
+                <details className="group">
+                  <summary className="flex items-center justify-between p-6 cursor-pointer hover:bg-gray-50 transition-colors">
+                    <h4 className="text-lg font-semibold text-gray-900">
+                      What is the minimum investment required for SME IPOs?
+                    </h4>
+                    <ChevronDown className="h-5 w-5 text-gray-500 group-open:rotate-180 transition-transform" />
+                  </summary>
+                  <div className="px-6 pb-6">
+                    <p className="text-gray-600">
+                      The minimum investment in SME IPOs varies by company but is generally lower than regular IPOs.
+                      Typically, the minimum application size ranges from ₹1,00,000 to ₹2,00,000. The exact amount
+                      depends on the company's lot size and price band. This makes SME IPOs more accessible to retail
+                      investors compared to large-cap IPOs.
+                    </p>
+                  </div>
+                </details>
+
+                {/* FAQ 4 */}
+                <details className="group">
+                  <summary className="flex items-center justify-between p-6 cursor-pointer hover:bg-gray-50 transition-colors">
+                    <h4 className="text-lg font-semibold text-gray-900">
+                      What are the risks associated with SME IPO investments?
+                    </h4>
+                    <ChevronDown className="h-5 w-5 text-gray-500 group-open:rotate-180 transition-transform" />
+                  </summary>
+                  <div className="px-6 pb-6">
+                    <p className="text-gray-600">
+                      SME IPO investments carry higher risks including limited liquidity, less stringent disclosure
+                      requirements, higher volatility, and potential business risks due to the smaller scale of
+                      operations. These companies may have limited operating history, dependence on key personnel, and
+                      face challenges in scaling operations. Investors should carefully evaluate the company's
+                      fundamentals before investing.
+                    </p>
+                  </div>
+                </details>
+
+                {/* FAQ 5 */}
+                <details className="group">
+                  <summary className="flex items-center justify-between p-6 cursor-pointer hover:bg-gray-50 transition-colors">
+                    <h4 className="text-lg font-semibold text-gray-900">
+                      Can SME IPO shares be traded immediately after listing?
+                    </h4>
+                    <ChevronDown className="h-5 w-5 text-gray-500 group-open:rotate-180 transition-colors" />
+                  </summary>
+                  <div className="px-6 pb-6">
+                    <p className="text-gray-600">
+                      Yes, SME IPO shares can be traded on the BSE SME platform immediately after listing. However,
+                      liquidity may be limited compared to main board stocks. Trading happens during regular market
+                      hours, and you can buy/sell through your broker's trading platform. It's important to note that
+                      SME stocks may have wider bid-ask spreads due to lower trading volumes.
+                    </p>
+                  </div>
+                </details>
+
+                {/* FAQ 6 */}
+                <details className="group">
+                  <summary className="flex items-center justify-between p-6 cursor-pointer hover:bg-gray-50 transition-colors">
+                    <h4 className="text-lg font-semibold text-gray-900">
+                      Are there any tax implications for SME IPO investments?
+                    </h4>
+                    <ChevronDown className="h-5 w-5 text-gray-500 group-open:rotate-180 transition-transform" />
+                  </summary>
+                  <div className="px-6 pb-6">
+                    <p className="text-gray-600">
+                      SME IPO investments are subject to the same tax rules as regular equity investments. Short-term
+                      capital gains (holding period less than 1 year) are taxed at 15%, while long-term capital gains
+                      exceeding ₹1 lakh are taxed at 10%. Dividends received are taxable as per your income tax slab.
+                      It's advisable to consult a tax advisor for specific situations.
+                    </p>
+                  </div>
+                </details>
+
+                {/* FAQ 7 */}
+                <details className="group">
+                  <summary className="flex items-center justify-between p-6 cursor-pointer hover:bg-gray-50 transition-colors">
+                    <h4 className="text-lg font-semibold text-gray-900">
+                      How should I research SME companies before investing?
+                    </h4>
+                    <ChevronDown className="h-5 w-5 text-gray-500 group-open:rotate-180 transition-transform" />
+                  </summary>
+                  <div className="px-6 pb-6">
+                    <p className="text-gray-600">
+                      Research SME companies by analyzing their business model, financial statements, management
+                      background, industry prospects, and competitive position. Review the DRHP (Draft Red Herring
+                      Prospectus) carefully, check for any regulatory issues, assess debt levels, and understand the
+                      purpose of fund raising. Consider the company's growth potential and scalability of the business
+                      model.
+                    </p>
+                  </div>
+                </details>
+
+                {/* FAQ 8 */}
+                <details className="group">
+                  <summary className="flex items-center justify-between p-6 cursor-pointer hover:bg-gray-50 transition-colors">
+                    <h4 className="text-lg font-semibold text-gray-900">
+                      What is the typical timeline for SME IPO listing?
+                    </h4>
+                    <ChevronDown className="h-5 w-5 text-gray-500 group-open:rotate-180 transition-transform" />
+                  </summary>
+                  <div className="px-6 pb-6">
+                    <p className="text-gray-600">
+                      SME IPOs typically have a 3-day subscription period, followed by allotment within 7-10 days. The
+                      shares are usually listed within 6-8 working days after the issue closes. The exact timeline may
+                      vary based on the company and market conditions. Investors receive allotment details via email and
+                      SMS, and shares are credited to their demat accounts before listing.
+                    </p>
+                  </div>
+                </details>
+              </div>
+            </div>
+          </div>
+
+          {/* Final CTA Section */}
           <div className="mt-16 text-center">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">Explore More IPO Tools</h3>
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">Stay Updated with SME IPO Opportunities</h3>
             <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
-              Don't miss out on investment opportunities. Check out our comprehensive IPO tools and resources.
+              Don't miss out on promising SME investment opportunities. Explore our comprehensive IPO tools and
+              resources.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/upcoming-ipo-calendar">
