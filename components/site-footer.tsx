@@ -14,10 +14,8 @@ import {
   Send,
   ExternalLink,
   Gift,
-  CreditCard,
-  BookOpen,
-  MoreHorizontal,
   Calculator,
+  MoreHorizontal,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -95,27 +93,20 @@ export function SiteFooter() {
                 <div className="text-sm font-bold text-white">500+</div>
                 <div className="text-xs text-gray-400">IPOs</div>
               </div>
-              <div className="text-center p-3 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 transition-colors">
+              {/* <div className="text-center p-3 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 transition-colors">
                 <Shield className="h-5 w-5 text-green-400 mx-auto mb-1" />
                 <div className="text-sm font-bold text-white">99.9%</div>
                 <div className="text-xs text-gray-400">Accuracy</div>
-              </div>
+              </div> */}
             </div>
 
             {/* Contact Info */}
             <div className="space-y-3">
               <div className="flex items-center space-x-3 text-sm text-gray-400 hover:text-white transition-colors">
                 <Mail className="h-4 w-4 text-blue-400" />
-                <a href="mailto:info@ipotracker.com">info@ipotracker.com</a>
+                <Link href="mailto:info@ipotracker.com">info@ipotracker.com</Link>
               </div>
-              <div className="flex items-center space-x-3 text-sm text-gray-400 hover:text-white transition-colors">
-                <Phone className="h-4 w-4 text-green-400" />
-                <a href="tel:+911234567890">+91 12345 67890</a>
-              </div>
-              <div className="flex items-center space-x-3 text-sm text-gray-400">
-                <MapPin className="h-4 w-4 text-red-400" />
-                <span>Mumbai, Maharashtra, India</span>
-              </div>
+          
             </div>
           </div>
 
@@ -180,7 +171,7 @@ export function SiteFooter() {
             </Link>
           </div>
 
-          {/* Resources & Tools */}
+          {/* Resources */}
           <div className="space-y-6">
             <h3 className="text-lg font-semibold text-white flex items-center">
               <Shield className="h-5 w-5 mr-2 text-purple-400" />
@@ -218,7 +209,7 @@ export function SiteFooter() {
                   { href: "https://www.nseindia.com", label: "NSE" },
                   { href: "https://www.bseindia.com", label: "BSE" },
                 ].map((item) => (
-                  <a
+                  <Link
                     key={item.href}
                     href={item.href}
                     target="_blank"
@@ -227,7 +218,7 @@ export function SiteFooter() {
                   >
                     {item.label}
                     <ExternalLink className="h-3 w-3 ml-1" />
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -242,26 +233,10 @@ export function SiteFooter() {
               <h3 className="text-lg font-semibold text-white mb-4">Follow Our Journey</h3>
               <div className="flex justify-center lg:justify-start space-x-4">
                 {[
-                  {
-                    href: "https://linkedin.com/company/ipotracker",
-                    icon: Linkedin,
-                    color: "hover:bg-blue-600/20 hover:text-blue-400",
-                  },
-                  {
-                    href: "https://twitter.com/ipotracker",
-                    icon: Twitter,
-                    color: "hover:bg-blue-400/20 hover:text-blue-300",
-                  },
-                  {
-                    href: "https://instagram.com/ipotracker",
-                    icon: Instagram,
-                    color: "hover:bg-pink-600/20 hover:text-pink-400",
-                  },
-                  {
-                    href: "https://youtube.com/@ipotracker",
-                    icon: Youtube,
-                    color: "hover:bg-red-600/20 hover:text-red-400",
-                  },
+                  { href: "https://linkedin.com/company/ipotracker", icon: Linkedin, color: "hover:bg-blue-600/20 hover:text-blue-400" },
+                  { href: "https://twitter.com/ipotracker", icon: Twitter, color: "hover:bg-blue-400/20 hover:text-blue-300" },
+                  { href: "https://instagram.com/ipotracker", icon: Instagram, color: "hover:bg-pink-600/20 hover:text-pink-400" },
+                  { href: "https://youtube.com/@ipotracker", icon: Youtube, color: "hover:bg-red-600/20 hover:text-red-400" },
                 ].map((social) => (
                   <a
                     key={social.href}
@@ -278,34 +253,13 @@ export function SiteFooter() {
 
             {/* Our Products */}
             <div className="text-center lg:text-right">
-              <Link href="/our-products">
+              <Link href="/products">
                 <h3 className="text-lg font-semibold text-white mb-4 hover:text-yellow-400 transition-colors inline-flex items-center">
                   <Gift className="h-5 w-5 mr-2 text-yellow-400" />
                   Our Products
                 </h3>
               </Link>
-              <div className="space-y-3">
-                <a
-                  href="https://cardrecommend.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block text-sm text-gray-400 hover:text-yellow-400 transition-colors flex items-center justify-end"
-                >
-                  <CreditCard className="h-4 w-4 mr-2 text-yellow-400" />
-                  CardRecommend
-                  <ExternalLink className="h-3 w-3 ml-1" />
-                </a>
-                <a
-                  href="https://readrecommend.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block text-sm text-gray-400 hover:text-yellow-400 transition-colors flex items-center justify-end"
-                >
-                  <BookOpen className="h-4 w-4 mr-2 text-yellow-400" />
-                  ReadRecommend
-                  <ExternalLink className="h-3 w-3 ml-1" />
-                </a>
-              </div>
+              {/* Removed all external product links */}
             </div>
           </div>
         </div>

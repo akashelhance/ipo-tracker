@@ -15,7 +15,7 @@ export default function DisclaimerPage() {
           <p className="text-gray-600">Last updated: June 9, 2025</p>
         </div>
 
-        <div className="prose prose-lg max-w-none">
+        <div className="max-w-none">
           <div className="bg-gray-50 p-6 rounded-lg mb-8">
             <h2 className="text-xl font-semibold mb-4">Table of Contents</h2>
             <ol className="list-decimal list-inside space-y-1">
@@ -100,6 +100,19 @@ export default function DisclaimerPage() {
               Before making any investment decision, you should seek advice from an independent financial advisor who
               takes into account your personal circumstances, financial situation, and individual needs.
             </p>
+
+            {/* 🔴 New GMP warning box */}
+            <div className="bg-red-50 border-l-4 border-red-400 p-4 mt-4">
+              <p className="font-semibold">Grey Market Premium (GMP) Disclaimer:</p>
+              <p>
+                IPOTracker does not provide any form of investment tips, recommendations, or personalized advice. All
+                investment decisions, including any profits or losses incurred, are solely your responsibility. We
+                display Grey Market Premium (GMP) figures based on data available from public sources. Relying on GMP
+                information or making investment decisions based on GMP is entirely your choice, and IPOTracker shall
+                not be held liable under any circumstances for any financial outcomes resulting from such actions.
+              </p>
+            </div>
+
             <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
               <p className="font-semibold">Important Risk Warning:</p>
               <p>

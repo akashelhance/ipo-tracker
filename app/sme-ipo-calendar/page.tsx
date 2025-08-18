@@ -1,55 +1,101 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import { SearchForm } from "@/components/search-form"
+import { CTAButton } from "@/components/cta-button"
 import {
-  Calendar,
   TrendingUp,
+  Calendar,
   Building2,
-  MapPin,
-  Calculator,
-  FileText,
+  Star,
+  ArrowRight,
+  Info,
   Users,
-  BarChart3,
+  FileText,
+  Target,
+  DollarSign,
   ExternalLink,
+    BarChart3,
+     Calculator,
   ChevronDown,
 } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { CTAButton } from "@/components/cta-button"
-import { ipos } from "@/lib/ipo-data"
 
-export const metadata: Metadata = {
-  title: "SME IPO Calendar 2025 | Small & Medium Enterprise IPO Listings",
-  description:
-    "Complete list of upcoming SME IPOs in 2025. Track SME IPO dates, price bands, lot sizes, and investment opportunities in small and medium enterprises.",
-  keywords: "SME IPO, small medium enterprise IPO, SME IPO calendar 2025, BSE SME, SME investment, upcoming SME IPO",
-  openGraph: {
-    title: "SME IPO Calendar 2025 | Small & Medium Enterprise IPO Listings",
-    description:
-      "Complete list of upcoming SME IPOs in 2025. Track SME IPO dates, price bands, lot sizes, and investment opportunities.",
-    type: "website",
-  },
-}
-
-// Filter only SME IPOs
-const smeIpos = ipos.filter((ipo) => ipo.ipoType === "SME")
-
-// Function to get IPO status
-function getIpoStatus(openDate: string, closeDate: string) {
-  const today = new Date()
-  const open = new Date(openDate)
-  const close = new Date(closeDate)
-
-  if (today < open) {
-    return { status: "Upcoming", color: "bg-blue-100 text-blue-800" }
-  } else if (today >= open && today <= close) {
-    return { status: "Open", color: "bg-green-100 text-green-800" }
-  } else {
-    return { status: "Closed", color: "bg-gray-100 text-gray-800" }
+interface IPO {
+  ipo_name: string
+  title: string
+  slug: string
+  ipo_type: string | null
+  published_on: string
+  issue_type: string
+  price_band_text: string
+  lot_size_text: string
+  gmp_text: string
+  listing: string[]
+  timeline: {
+    open_date?: string
+    close_date?: string
+    allotment_date?: string
+    refunds_date?: string
+    credit_to_demat_date?: string
+    listing_date?: string
   }
 }
 
-// Function to format date
-function formatDate(dateString: string) {
+interface PageProps {
+  searchParams: { search?: string }
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: "Upcoming SME IPO Calendar 2025 – IPO List with Dates & Price Band | Live Updates",
+    description:
+      "Check the complete list of upcoming SME IPOs in 2025 with issue dates, price band, lot size, exchange platform and more. Track SME IPOs with live updates.",
+    keywords:
+      "upcoming SME IPO 2025, IPO calendar, IPO list, IPO dates, price band, lot size, SME IPO, NSE IPO, BSE IPO",
+    authors: [{ name: "SME IPO Calendar Team" }],
+    creator: "SME IPO Calendar",
+    publisher: "SME IPO Calendar",
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
+    },
+    openGraph: {
+      title: "Upcoming SME IPO Calendar 2025 – Complete IPO List with Dates & Price Band",
+      description:
+        "Track upcoming SME IPOs in 2025 with complete details including issue dates, price band, lot size and exchange platform. Get live updates on SME IPOs.",
+      type: "website",
+      locale: "en_IN",
+      url: "https://yoursite.com/upcoming-sme-ipo-calendar",
+      siteName: "SME IPO Calendar",
+      images: [
+        {
+          url: "https://yoursite.com/images/sme-ipo-calendar-og.jpg",
+          width: 1200,
+          height: 630,
+          alt: "Upcoming SME IPO Calendar 2025",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Upcoming SME IPO Calendar 2025 – Complete IPO List",
+      description: "Track upcoming SME IPOs in 2025 with complete details including dates, price band, and lot size.",
+      images: ["https://yoursite.com/images/sme-ipo-calendar-twitter.jpg"],
+    },
+    alternates: {
+      canonical: "https://yoursite.com/upcoming-sme-ipo-calendar",
+    },
+  }
+}
+
+function formatDate(dateString?: string): string {
+  if (!dateString) return "N/A"
   const date = new Date(dateString)
   return date.toLocaleDateString("en-IN", {
     day: "2-digit",
@@ -58,195 +104,488 @@ function formatDate(dateString: string) {
   })
 }
 
-export default function SMEIpoCalendarPage() {
+function extractPriceBand(priceBandText: string): { low: number; high: number } {
+  const matches = priceBandText.match(/₹\s?([\d,.]+)\s?to\s?₹\s?([\d,.]+)/i)
+  if (!matches) return { low: 0, high: 0 }
+  const low = Number.parseFloat(matches[1].replace(/,/g, ""))
+  const high = Number.parseFloat(matches[2].replace(/,/g, ""))
+  return { low, high }
+}
+
+function formatPriceBand(low: number, high: number): string {
+  if (!low && !high) return "N/A"
+  return `₹${low.toLocaleString("en-IN")} - ₹${high.toLocaleString("en-IN")}`
+}
+
+export default async function SMEIPOCalendarPage({ searchParams }: PageProps) {
+  const search = searchParams?.search || ""
+
+  // Fetch IPO data server-side with no cache (fresh every request)
+  const res = await fetch(`http://localhost:3000/api/ipos/light`, {
+    cache: "no-store",
+  })
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch IPO data")
+  }
+
+  const data = await res.json()
+  const allIpos: IPO[] = data.docs || []
+
+  let ipos = allIpos.filter((ipo) => ipo.ipo_type === "SME")
+
+  // Filter by search query (case insensitive)
+  if (search) {
+    ipos = ipos.filter((ipo) => ipo.title.toLowerCase().includes(search.toLowerCase()))
+  }
+
+  const totalSMEIPOs = ipos.length
+  const openSMEIPOs = ipos.filter((ipo) => {
+    const openDate = new Date(ipo.timeline.open_date || ipo.published_on)
+    const closeDate = new Date(ipo.timeline.close_date || ipo.published_on)
+    const now = new Date()
+    return now >= openDate && now <= closeDate
+  }).length
+
+  // FAQ data
+  const faqs = [
+    {
+      q: "What is an SME IPO?",
+      a: "An SME Initial Public Offering (IPO) is when a smaller company offers its shares to the public for the first time on a stock exchange, typically with relaxed listing requirements.",
+    },
+    {
+      q: "How to apply for an SME IPO in India?",
+      a: "You can apply for SME IPOs through your broker's trading platform, mobile apps, or UPI-enabled applications. You need a demat account and PAN card to apply.",
+    },
+    {
+      q: "What is the minimum investment required for SME IPO?",
+      a: "The minimum investment depends on the lot size and price band of the SME IPO. It typically ranges from ₹10,000 to ₹15,000 for retail investors.",
+    },
+    {
+      q: "What are the benefits of investing in SME IPOs?",
+      a: "SME IPOs offer high growth potential and the chance to invest in emerging businesses. They also provide diversification opportunities and transparency in financial disclosures.",
+    },
+    {
+      q: "When do SME IPO shares get allotted?",
+      a: "SME IPO shares are typically allotted within 7-10 working days after the IPO closes. The allotment process is done through a computerized lottery system.",
+    },
+    {
+      q: "What happens if an SME IPO is oversubscribed?",
+      a: "If an SME IPO is oversubscribed, shares are allotted through a lottery system. Retail investors may receive partial allotment or no allotment based on the subscription level.",
+    },
+    {
+      q: "Can I sell SME IPO shares immediately after listing?",
+      a: "Yes, you can sell SME IPO shares immediately after they are listed and credited to your demat account, usually on the listing day.",
+    },
+    {
+      q: "What documents are required for SME IPO application?",
+      a: "You need a PAN card, Aadhaar card, bank account, and demat account to apply for an SME IPO. Some brokers may require additional KYC documents.",
+    },
+  ]
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-indigo-50">
-      {/* Hero Section */}
-      <section className="relative py-16 bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 text-white overflow-hidden">
-        <div className="absolute inset-0 bg-black/10"></div>
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center max-w-4xl mx-auto">
-            <div className="flex items-center justify-center gap-3 mb-6">
-              <Building2 className="h-12 w-12" />
-              <h1 className="text-4xl md:text-6xl font-bold">SME IPO Calendar</h1>
-            </div>
-            <p className="text-xl md:text-2xl mb-8 opacity-90">
-              Discover investment opportunities in Small & Medium Enterprises
-            </p>
-            <div className="flex flex-wrap justify-center gap-6 text-sm md:text-base">
-              <div className="flex items-center gap-2">
-                <Calendar className="h-5 w-5" />
-                <span>Updated Daily</span>
+    <>
+      {/* SEO JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            name: "Upcoming SME IPO Calendar 2025",
+            description:
+              "Complete list of upcoming SME IPOs in 2025 with issue dates, price band, lot size and exchange platform details.",
+            url: "https://yoursite.com/upcoming-sme-ipo-calendar",
+            mainEntity: {
+              "@type": "ItemList",
+              name: "Upcoming SME IPOs 2025",
+              description: "List of upcoming SME Initial Public Offerings in India for 2025",
+              numberOfItems: ipos.length,
+              itemListElement: ipos.map((ipo, index) => ({
+                "@type": "ListItem",
+                position: index + 1,
+                item: {
+                  "@type": "FinancialProduct",
+                  name: `${ipo.title} IPO`,
+                  description: `${ipo.title} Initial Public Offering with price band ${ipo.price_band_text}`,
+                  url: `https://yoursite.com/ipo/${ipo.slug}`,
+                  provider: {
+                    "@type": "Organization",
+                    name: ipo.title,
+                  },
+                  offers: {
+                    "@type": "Offer",
+                    price: ipo.price_band_text,
+                    priceCurrency: "INR",
+                    validFrom: ipo.timeline.open_date,
+                    validThrough: ipo.timeline.close_date,
+                  },
+                },
+              })),
+            },
+            breadcrumb: {
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  name: "Home",
+                  item: "https://yoursite.com",
+                },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  name: "SME IPO Calendar",
+                  item: "https://yoursite.com/upcoming-sme-ipo-calendar",
+                },
+              ],
+            },
+            publisher: {
+              "@type": "Organization",
+              name: "SME IPO Calendar",
+              logo: {
+                "@type": "ImageObject",
+                url: "https://yoursite.com/logo.png",
+              },
+            },
+            dateModified: new Date().toISOString(),
+            datePublished: "2024-01-01T00:00:00Z",
+          }),
+        }}
+      />
+
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+        {/* Hero Section */}
+        <div className="relative overflow-hidden bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900">
+          <div className="absolute inset-0">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-indigo-600/20"></div>
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(120,119,198,0.1),transparent_50%)]"></div>
+          </div>
+          <div className="relative container mx-auto px-4 py-16">
+            <div className="text-center text-white">
+              <div className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-full text-sm font-medium mb-6 border border-white/20">
+                <Star className="h-4 w-4 mr-2" />
+                SME IPO Tracking
               </div>
-              <div className="flex items-center gap-2">
-                <TrendingUp className="h-5 w-5" />
-                <span>{smeIpos.length} SME IPOs Listed</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <MapPin className="h-5 w-5" />
-                <span>BSE SME Platform</span>
-              </div>
+              <h1 className="text-4xl md:text-6xl font-bold mb-6 text-white">SME IPO Calendar 2025</h1>
+              <p className="text-xl md:text-2xl text-blue-100 mb-8 max-w-3xl mx-auto">
+                Discover high-growth SME investment opportunities. Track dates, price bands, and never miss a promising
+                SME IPO.
+              </p>
             </div>
           </div>
+          <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-slate-50 to-transparent"></div>
         </div>
-      </section>
 
-      {/* Main Content */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          {/* Section Header */}
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">SME IPO Calendar 2025</h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Complete list of Small & Medium Enterprise IPOs with detailed information including price bands, dates,
-              and investment requirements.
-            </p>
+        <div className="container mx-auto px-4 py-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div className="group bg-gradient-to-br from-purple-500 to-purple-600 p-6 rounded-2xl shadow-xl text-white transform hover:scale-105 transition-all duration-300">
+              <div className="flex items-center justify-between mb-4">
+                <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl">
+                  <Star className="h-6 w-6 text-white" />
+                </div>
+                <div className="text-3xl font-bold">{totalSMEIPOs}</div>
+              </div>
+              <div className="text-purple-100 text-lg font-medium">Total SME IPOs</div>
+              <div className="text-purple-200 text-sm mt-1">Growth opportunities</div>
+            </div>
+
+            <div className="group bg-gradient-to-br from-emerald-500 to-emerald-600 p-6 rounded-2xl shadow-xl text-white transform hover:scale-105 transition-all duration-300">
+              <div className="flex items-center justify-between mb-4">
+                <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl">
+                  <TrendingUp className="h-6 w-6 text-white" />
+                </div>
+                <div className="text-3xl font-bold">{openSMEIPOs}</div>
+              </div>
+              <div className="text-emerald-100 text-lg font-medium">Open for Subscription</div>
+              <div className="text-emerald-200 text-sm mt-1">Active SME offerings</div>
+            </div>
+
+            <div className="group bg-gradient-to-br from-orange-500 to-red-600 p-6 rounded-2xl shadow-xl text-white transform hover:scale-105 transition-all duration-300">
+              <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl mb-4 inline-flex items-center">
+                <DollarSign className="h-6 w-6 text-white mr-2" />
+              </div>
+
+              <Link
+                href="https://zerodha.com/?c=QT4498&s=CONSOLE"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block text-center"
+              >
+                <div className="text-orange-100 text-lg font-medium mb-2">Start Investing</div>
+                <div className="text-orange-200 text-sm">Open Demat Account</div>
+              </Link>
+            </div>
           </div>
 
-          {/* SME IPO Table */}
-          {smeIpos.length > 0 ? (
-            <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
-              {/* Desktop Table */}
-              <div className="hidden lg:block overflow-x-auto">
+          {/* Enhanced Table Container */}
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/50 overflow-hidden mb-12">
+            {/* Table Header with Search */}
+            <div className="bg-gradient-to-r from-gray-50 to-blue-50 p-6 border-b border-gray-200/50">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-900 mb-2">Upcoming SME IPOs 2025</h2>
+                  <p className="text-gray-600">Track the latest public offerings</p>
+                </div>
+                <SearchForm defaultValue={search} />
+              </div>
+            </div>
+
+            {/* Enhanced Table */}
+            <div className="overflow-x-auto">
+              {ipos.length > 0 ? (
                 <table className="w-full">
-                  <thead className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white">
+                  <thead className="bg-gradient-to-r from-gray-50 to-slate-100">
                     <tr>
-                      <th className="px-6 py-4 text-left font-semibold">Company Name</th>
-                      <th className="px-6 py-4 text-center font-semibold">Status</th>
-                      <th className="px-6 py-4 text-center font-semibold">Price Band (₹)</th>
-                      <th className="px-6 py-4 text-center font-semibold">Open Date</th>
-                      <th className="px-6 py-4 text-center font-semibold">Close Date</th>
-                      <th className="px-6 py-4 text-center font-semibold">Market Lot</th>
-                      <th className="px-6 py-4 text-center font-semibold">Issue Size</th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                        Company Details
+                      </th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                        IPO Type
+                      </th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                        Timeline
+                      </th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                        Price Band
+                      </th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                        Investment
+                      </th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                        Exchange
+                      </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-100">
-                    {smeIpos.map((ipo, index) => {
-                      const { status, color } = getIpoStatus(ipo.openDate, ipo.closeDate)
+                  <tbody className="bg-white divide-y divide-gray-100">
+                    {ipos.map((ipo) => {
+                      const { low, high } = extractPriceBand(ipo.price_band_text || "")
+                      const lotSize = Number.parseInt(ipo.lot_size_text || "1") || 1
 
                       return (
                         <tr
-                          key={ipo.documentId}
-                          className={`hover:bg-purple-50 transition-colors ${index % 2 === 0 ? "bg-gray-50" : "bg-white"}`}
+                          key={ipo.slug}
+                          className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-300 group"
                         >
-                          <td className="px-6 py-4">
-                            <Link
-                              href={`/ipo/${ipo.slug}`}
-                              className="font-semibold text-purple-700 hover:text-purple-900 hover:underline transition-colors"
-                            >
-                              {ipo.companyName}
-                            </Link>
-                            <div className="text-sm text-gray-500 mt-1">{ipo.ipoType}</div>
+                          {/* Company Details */}
+                          <td className="px-6 py-6">
+                            <div className="flex items-center">
+                              <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold text-lg">
+                                {ipo.title.charAt(0)}
+                              </div>
+                              <div className="ml-4">
+                                <Link
+                                  href={`/ipo/${ipo.slug}`}
+                                  className="text-lg font-semibold text-gray-900 hover:text-blue-600 transition-colors group-hover:text-blue-700"
+                                >
+                                  {ipo.ipo_name}
+                                  <ArrowRight className="inline h-4 w-4 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                </Link>
+                                <div className="flex items-center mt-1">
+                                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800">
+                                    {ipo.issue_type || "N/A"}
+                                  </span>
+                                  <span className="ml-2 text-sm text-gray-500">{ipo.lot_size_text}</span>
+                                </div>
+                              </div>
+                            </div>
                           </td>
-                          <td className="px-6 py-4 text-center">
-                            <Badge className={`${color} font-medium`}>{status}</Badge>
+
+                          {/* IPO Type */}
+                          <td className="px-6 py-6">
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-green-100 to-emerald-100 text-green-800">
+                              {ipo.ipo_type || "N/A"}
+                            </span>
                           </td>
-                          <td className="px-6 py-4 text-center font-semibold">
-                            ₹{ipo.priceBandLow} - ₹{ipo.priceBandHigh}
+
+                          {/* Timeline */}
+                          <td className="px-6 py-6">
+                            <div className="space-y-2">
+                              <div className="flex items-center text-sm">
+                                <Calendar className="h-4 w-4 text-green-500 mr-2" />
+                                <span className="font-medium text-gray-900">Opens:</span>
+                                <span className="ml-2 text-green-600 font-semibold">
+                                  {formatDate(ipo.timeline.open_date || ipo.published_on)}
+                                </span>
+                              </div>
+                              <div className="flex items-center text-sm">
+                                <Calendar className="h-4 w-4 text-red-500 mr-2" />
+                                <span className="font-medium text-gray-900">Closes:</span>
+                                <span className="ml-2 text-red-600 font-semibold">
+                                  {formatDate(ipo.timeline.close_date || ipo.published_on)}
+                                </span>
+                              </div>
+                            </div>
                           </td>
-                          <td className="px-6 py-4 text-center text-green-700 font-medium">
-                            {formatDate(ipo.openDate)}
+
+                          {/* Price Band */}
+                          <td className="px-6 py-6">
+                            <div className="text-lg font-bold text-gray-900 mb-1">{`₹${low.toLocaleString()} - ₹${high.toLocaleString()}`}</div>
+                            <div className="text-sm text-gray-500">Price Range</div>
                           </td>
-                          <td className="px-6 py-4 text-center text-red-700 font-medium">
-                            {formatDate(ipo.closeDate)}
+
+                          {/* Investment */}
+                          <td className="px-6 py-6">
+                            <div className="text-lg font-bold text-purple-600 mb-1">{lotSize}</div>
+                            <div className="text-sm text-gray-500">Lot Size</div>
+                            <div className="text-xs text-gray-400 mt-1">
+                              Min: ₹{(high * lotSize).toLocaleString("en-IN")}
+                            </div>
                           </td>
-                          <td className="px-6 py-4 text-center font-semibold">{ipo.marketLot.toLocaleString()}</td>
-                          <td className="px-6 py-4 text-center font-semibold">{ipo.ipoSize}</td>
+
+                          {/* Exchange */}
+                          <td className="px-6 py-6">
+                            <span className="inline-flex items-center px-3 py-2 rounded-full text-sm font-semibold bg-gradient-to-r from-emerald-100 to-teal-100 text-emerald-800 border border-emerald-200">
+                              <Building2 className="h-4 w-4 mr-1" />
+                              {ipo.listing.join(", ")}
+                            </span>
+                          </td>
                         </tr>
                       )
                     })}
                   </tbody>
                 </table>
-              </div>
-
-              {/* Mobile Cards */}
-              <div className="lg:hidden divide-y divide-gray-100">
-                {smeIpos.map((ipo) => {
-                  const { status, color } = getIpoStatus(ipo.openDate, ipo.closeDate)
-
-                  return (
-                    <div key={ipo.documentId} className="p-6 hover:bg-purple-50 transition-colors">
-                      <div className="flex items-start justify-between mb-3">
-                        <Link
-                          href={`/ipo/${ipo.slug}`}
-                          className="font-semibold text-lg text-purple-700 hover:text-purple-900 hover:underline transition-colors"
-                        >
-                          {ipo.companyName}
-                        </Link>
-                        <Badge className={`${color} font-medium ml-2`}>{status}</Badge>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-4 mb-4">
-                        <div>
-                          <div className="text-sm text-gray-500">Price Band</div>
-                          <div className="font-semibold">
-                            ₹{ipo.priceBandLow} - ₹{ipo.priceBandHigh}
-                          </div>
-                        </div>
-                        <div>
-                          <div className="text-sm text-gray-500">Market Lot</div>
-                          <div className="font-semibold">{ipo.marketLot.toLocaleString()}</div>
-                        </div>
-                        <div>
-                          <div className="text-sm text-gray-500">Open Date</div>
-                          <div className="font-semibold text-green-700">{formatDate(ipo.openDate)}</div>
-                        </div>
-                        <div>
-                          <div className="text-sm text-gray-500">Close Date</div>
-                          <div className="font-semibold text-red-700">{formatDate(ipo.closeDate)}</div>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <div className="text-sm text-gray-500">Issue Size</div>
-                          <div className="font-semibold">{ipo.ipoSize}</div>
-                        </div>
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
+              ) : (
+                <div className="bg-white rounded-2xl shadow-xl p-12 text-center">
+                  <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Star className="h-8 w-8 text-purple-600" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    {search ? "No SME IPOs found" : "No SME IPOs available"}
+                  </h3>
+                  <p className="text-gray-600 mb-6">
+                    {search
+                      ? `No SME IPOs match your search for "${search}". Try a different search term.`
+                      : "There are currently no SME IPOs available. Check back soon for new opportunities."}
+                  </p>
+                  {search && (
+                    <Link
+                      href="/sme-ipos"
+                      className="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                    >
+                      View All SME IPOs
+                    </Link>
+                  )}
+                </div>
+              )}
             </div>
-          ) : (
-            <div className="text-center py-16 bg-white rounded-2xl shadow-xl">
-              <Building2 className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-gray-600 mb-2">No SME IPOs Available</h3>
-              <p className="text-gray-500">Check back later for upcoming SME IPO listings.</p>
-            </div>
-          )}
+          </div>
 
-          {/* Info Section */}
-          <div className="mt-16 bg-gradient-to-r from-purple-100 to-indigo-100 rounded-2xl p-8">
-            <div className="text-center mb-8">
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">About SME IPOs</h3>
-              <p className="text-gray-700 max-w-3xl mx-auto">
-                SME IPOs are offered by Small and Medium Enterprises on the BSE SME platform. These IPOs typically have
-                lower minimum investment requirements and offer opportunities to invest in growing businesses with high
-                potential returns.
-              </p>
-            </div>
+          {/* Comprehensive IPO Information Section */}
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/50 p-8 mb-12">
+            <div className="max-w-6xl mx-auto">
+              <h2 className="text-3xl font-bold text-gray-900 mb-8 flex items-center">
+                <Info className="h-8 w-8 mr-4 text-blue-600" />
+                What is an SME IPO?
+              </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="text-center p-6 bg-white rounded-xl shadow-sm">
-                <Building2 className="h-8 w-8 text-purple-600 mx-auto mb-3" />
-                <h4 className="font-semibold text-gray-900 mb-2">BSE SME Platform</h4>
-                <p className="text-sm text-gray-600">Listed on dedicated BSE SME exchange with special regulations</p>
-              </div>
-              <div className="text-center p-6 bg-white rounded-xl shadow-sm">
-                <TrendingUp className="h-8 w-8 text-purple-600 mx-auto mb-3" />
-                <h4 className="font-semibold text-gray-900 mb-2">High Growth Potential</h4>
-                <p className="text-sm text-gray-600">SMEs often show rapid growth and expansion opportunities</p>
-              </div>
-              <div className="text-center p-6 bg-white rounded-xl shadow-sm">
-                <Calendar className="h-8 w-8 text-purple-600 mx-auto mb-3" />
-                <h4 className="font-semibold text-gray-900 mb-2">Lower Investment</h4>
-                <p className="text-sm text-gray-600">Smaller lot sizes make SME IPOs accessible to retail investors</p>
+              <div className="prose prose-lg max-w-none text-gray-700 space-y-6">
+                <p className="text-lg leading-relaxed">
+                  An SME Initial Public Offering (IPO) is when a smaller company offers its shares to the public for the
+                  first time on a stock exchange, typically with relaxed listing requirements. This process allows
+                  companies to raise capital from public investors to fund business expansion, pay off debts, or provide
+                  liquidity to existing shareholders. For investors, SME IPOs present an opportunity to invest in
+                  emerging businesses during their transition from private to public ownership.
+                </p>
+
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-6 my-8">
+                  <h3 className="text-2xl font-bold text-blue-900 mb-4 flex items-center">
+                    <Building2 className="h-6 w-6 mr-3" />
+                    Understanding SME IPO Process
+                  </h3>
+                  <p className="text-blue-800 leading-relaxed">
+                    The SME IPO process involves several stages including company valuation, regulatory approvals from
+                    SEBI, roadshows to institutional investors, price discovery, and finally the public offering.
+                    Companies work with investment banks and underwriters to determine the IPO price band, which
+                    represents the range within which investors can bid for shares. The final price is determined based
+                    on demand and market conditions.
+                  </p>
+                </div>
+
+                <p className="leading-relaxed">
+                  SME IPOs are designed for smaller companies with a post-issue paid-up capital between ₹1-25 crores.
+                  These offerings have relaxed compliance requirements and provide growth-stage companies access to
+                  public capital. SME IPOs often offer higher growth potential but come with increased risk.
+                </p>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 my-12">
+                  <div className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-xl p-6">
+                    <h4 className="text-xl font-bold text-green-900 mb-4 flex items-center">
+                      <Users className="h-6 w-6 mr-3" />
+                      SME IPOs
+                    </h4>
+                    <p className="text-green-800 leading-relaxed">
+                      SME IPOs are designed for smaller companies with a post-issue paid-up capital between ₹1-25
+                      crores. These offerings have relaxed compliance requirements and provide growth-stage companies
+                      access to public capital. SME IPOs often offer higher growth potential but come with increased
+                      risk.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-xl p-6">
+                  <h4 className="text-xl font-bold text-amber-900 mb-4 flex items-center">
+                    <FileText className="h-6 w-6 mr-3" />
+                    IPO Application Process
+                  </h4>
+                  <p className="text-amber-800 leading-relaxed">
+                    To apply for an IPO, investors need a demat account, PAN card, and bank account. Applications can be
+                    submitted through brokers, banks, or UPI-enabled platforms. Retail investors can apply for shares
+                    worth up to ₹2 lakhs, while applications above this amount are classified under the
+                    Non-Institutional Investor (NII) category. The allotment process is conducted through a computerized
+                    lottery system for oversubscribed IPOs.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Explore More Investment Tools Section */}
+          {/* CTA Section */}
+          <div className="text-center mb-12">
+            <CTAButton size="lg" />
+            <p className="text-gray-600 text-sm mt-3">Apply for IPOs with zero brokerage charges</p>
+          </div>
+
+          {/* Enhanced Information Section */}
+          <div className="mt-12 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 border border-blue-200 rounded-2xl p-8">
+            <h3 className="text-2xl font-bold text-blue-900 mb-6 flex items-center">
+              <Target className="h-7 w-7 mr-3 text-blue-600" />
+              Key Benefits of SME IPO Investment
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-blue-800">
+              <div className="bg-white/50 backdrop-blur-sm rounded-xl p-6">
+                <h4 className="font-bold text-lg mb-3 text-blue-900">Early Investment Opportunity</h4>
+                <p className="leading-relaxed">
+                  SME IPOs provide the chance to invest in companies at their public market debut, potentially capturing
+                  significant growth as the company expands and matures in the public markets.
+                </p>
+              </div>
+              <div className="bg-white/50 backdrop-blur-sm rounded-xl p-6">
+                <h4 className="font-bold text-lg mb-3 text-blue-900">Portfolio Diversification</h4>
+                <p className="leading-relaxed">
+                  Adding SME IPO stocks to your portfolio can provide diversification across different sectors, company
+                  sizes, and growth stages, helping to spread investment risk.
+                </p>
+              </div>
+              <div className="bg-white/50 backdrop-blur-sm rounded-xl p-6">
+                <h4 className="font-bold text-lg mb-3 text-blue-900">Transparency & Disclosure</h4>
+                <p className="leading-relaxed">
+                  Public companies are required to maintain high standards of financial disclosure and corporate
+                  governance, providing investors with regular updates and transparency.
+                </p>
+              </div>
+              <div className="bg-white/50 backdrop-blur-sm rounded-xl p-6">
+                <h4 className="font-bold text-lg mb-3 text-blue-900">Liquidity Benefits</h4>
+                <p className="leading-relaxed">
+                  Once listed, SME IPO shares can be easily bought and sold on stock exchanges, providing liquidity that
+                  is not available with private company investments.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Navigation */}
+             {/* Explore More Investment Tools Section */}
           <div className="mt-16">
             <div className="text-center mb-12">
               <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Explore More Investment Tools</h3>
@@ -381,187 +720,44 @@ export default function SMEIpoCalendarPage() {
               <CTAButton size="lg" className="bg-white text-blue-600 hover:bg-gray-100" />
             </div>
           </div>
-
-          {/* FAQ Section */}
-          <div className="mt-16">
-            <div className="text-center mb-12">
-              <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h3>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                Get answers to common questions about SME IPOs and investing
-              </p>
-            </div>
-
-            <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
-              <div className="divide-y divide-gray-100">
-                {/* FAQ 1 */}
-                <details className="group">
-                  <summary className="flex items-center justify-between p-6 cursor-pointer hover:bg-gray-50 transition-colors">
-                    <h4 className="text-lg font-semibold text-gray-900">
-                      What are SME IPOs and how do they differ from regular IPOs?
-                    </h4>
-                    <ChevronDown className="h-5 w-5 text-gray-500 group-open:rotate-180 transition-transform" />
-                  </summary>
-                  <div className="px-6 pb-6">
-                    <p className="text-gray-600">
-                      SME IPOs are Initial Public Offerings by Small and Medium Enterprises listed on the BSE SME
-                      platform. They differ from regular IPOs in terms of listing requirements, minimum investment
-                      amounts, and regulatory framework. SME IPOs typically have lower issue sizes, simplified
-                      compliance requirements, and are designed to help smaller companies raise capital for growth.
-                    </p>
-                  </div>
-                </details>
-
-                {/* FAQ 2 */}
-                <details className="group">
-                  <summary className="flex items-center justify-between p-6 cursor-pointer hover:bg-gray-50 transition-colors">
-                    <h4 className="text-lg font-semibold text-gray-900">How can I invest in SME IPOs?</h4>
-                    <ChevronDown className="h-5 w-5 text-gray-500 group-open:rotate-180 transition-transform" />
-                  </summary>
-                  <div className="px-6 pb-6">
-                    <p className="text-gray-600">
-                      To invest in SME IPOs, you need a demat account with a broker that provides access to BSE SME
-                      platform. You can apply through your broker's online platform, mobile app, or by submitting a
-                      physical application form. The application process is similar to regular IPOs, requiring you to
-                      specify the number of shares and bid price within the given price band.
-                    </p>
-                  </div>
-                </details>
-
-                {/* FAQ 3 */}
-                <details className="group">
-                  <summary className="flex items-center justify-between p-6 cursor-pointer hover:bg-gray-50 transition-colors">
-                    <h4 className="text-lg font-semibold text-gray-900">
-                      What is the minimum investment required for SME IPOs?
-                    </h4>
-                    <ChevronDown className="h-5 w-5 text-gray-500 group-open:rotate-180 transition-transform" />
-                  </summary>
-                  <div className="px-6 pb-6">
-                    <p className="text-gray-600">
-                      The minimum investment in SME IPOs varies by company but is generally lower than regular IPOs.
-                      Typically, the minimum application size ranges from ₹1,00,000 to ₹2,00,000. The exact amount
-                      depends on the company's lot size and price band. This makes SME IPOs more accessible to retail
-                      investors compared to large-cap IPOs.
-                    </p>
-                  </div>
-                </details>
-
-                {/* FAQ 4 */}
-                <details className="group">
-                  <summary className="flex items-center justify-between p-6 cursor-pointer hover:bg-gray-50 transition-colors">
-                    <h4 className="text-lg font-semibold text-gray-900">
-                      What are the risks associated with SME IPO investments?
-                    </h4>
-                    <ChevronDown className="h-5 w-5 text-gray-500 group-open:rotate-180 transition-transform" />
-                  </summary>
-                  <div className="px-6 pb-6">
-                    <p className="text-gray-600">
-                      SME IPO investments carry higher risks including limited liquidity, less stringent disclosure
-                      requirements, higher volatility, and potential business risks due to the smaller scale of
-                      operations. These companies may have limited operating history, dependence on key personnel, and
-                      face challenges in scaling operations. Investors should carefully evaluate the company's
-                      fundamentals before investing.
-                    </p>
-                  </div>
-                </details>
-
-                {/* FAQ 5 */}
-                <details className="group">
-                  <summary className="flex items-center justify-between p-6 cursor-pointer hover:bg-gray-50 transition-colors">
-                    <h4 className="text-lg font-semibold text-gray-900">
-                      Can SME IPO shares be traded immediately after listing?
-                    </h4>
-                    <ChevronDown className="h-5 w-5 text-gray-500 group-open:rotate-180 transition-colors" />
-                  </summary>
-                  <div className="px-6 pb-6">
-                    <p className="text-gray-600">
-                      Yes, SME IPO shares can be traded on the BSE SME platform immediately after listing. However,
-                      liquidity may be limited compared to main board stocks. Trading happens during regular market
-                      hours, and you can buy/sell through your broker's trading platform. It's important to note that
-                      SME stocks may have wider bid-ask spreads due to lower trading volumes.
-                    </p>
-                  </div>
-                </details>
-
-                {/* FAQ 6 */}
-                <details className="group">
-                  <summary className="flex items-center justify-between p-6 cursor-pointer hover:bg-gray-50 transition-colors">
-                    <h4 className="text-lg font-semibold text-gray-900">
-                      Are there any tax implications for SME IPO investments?
-                    </h4>
-                    <ChevronDown className="h-5 w-5 text-gray-500 group-open:rotate-180 transition-transform" />
-                  </summary>
-                  <div className="px-6 pb-6">
-                    <p className="text-gray-600">
-                      SME IPO investments are subject to the same tax rules as regular equity investments. Short-term
-                      capital gains (holding period less than 1 year) are taxed at 15%, while long-term capital gains
-                      exceeding ₹1 lakh are taxed at 10%. Dividends received are taxable as per your income tax slab.
-                      It's advisable to consult a tax advisor for specific situations.
-                    </p>
-                  </div>
-                </details>
-
-                {/* FAQ 7 */}
-                <details className="group">
-                  <summary className="flex items-center justify-between p-6 cursor-pointer hover:bg-gray-50 transition-colors">
-                    <h4 className="text-lg font-semibold text-gray-900">
-                      How should I research SME companies before investing?
-                    </h4>
-                    <ChevronDown className="h-5 w-5 text-gray-500 group-open:rotate-180 transition-transform" />
-                  </summary>
-                  <div className="px-6 pb-6">
-                    <p className="text-gray-600">
-                      Research SME companies by analyzing their business model, financial statements, management
-                      background, industry prospects, and competitive position. Review the DRHP (Draft Red Herring
-                      Prospectus) carefully, check for any regulatory issues, assess debt levels, and understand the
-                      purpose of fund raising. Consider the company's growth potential and scalability of the business
-                      model.
-                    </p>
-                  </div>
-                </details>
-
-                {/* FAQ 8 */}
-                <details className="group">
-                  <summary className="flex items-center justify-between p-6 cursor-pointer hover:bg-gray-50 transition-colors">
-                    <h4 className="text-lg font-semibold text-gray-900">
-                      What is the typical timeline for SME IPO listing?
-                    </h4>
-                    <ChevronDown className="h-5 w-5 text-gray-500 group-open:rotate-180 transition-transform" />
-                  </summary>
-                  <div className="px-6 pb-6">
-                    <p className="text-gray-600">
-                      SME IPOs typically have a 3-day subscription period, followed by allotment within 7-10 days. The
-                      shares are usually listed within 6-8 working days after the issue closes. The exact timeline may
-                      vary based on the company and market conditions. Investors receive allotment details via email and
-                      SMS, and shares are credited to their demat accounts before listing.
-                    </p>
-                  </div>
-                </details>
-              </div>
-            </div>
-          </div>
-
-          {/* Final CTA Section */}
-          <div className="mt-16 text-center">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">Stay Updated with SME IPO Opportunities</h3>
-            <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
-              Don't miss out on promising SME investment opportunities. Explore our comprehensive IPO tools and
-              resources.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/upcoming-ipo-calendar">
-                <Button variant="outline" size="lg" className="px-8">
-                  View All IPOs
-                </Button>
-              </Link>
-              <Link href="/ipo-subscription-status">
-                <Button size="lg" className="px-8 bg-purple-600 hover:bg-purple-700">
-                  Check Subscription Status
-                </Button>
-              </Link>
-            </div>
-          </div>
         </div>
-      </section>
-    </div>
+
+        {/* FAQ Section */}
+        {faqs.length > 0 && (
+          <section className="mt-16">
+            <div className="container mx-auto px-4">
+              <h2 className="text-3xl font-bold text-gray-900 mb-6 border-b border-gray-300 pb-2">
+                Frequently Asked Questions
+              </h2>
+
+              {faqs.map((faq, idx) => (
+                <details key={idx} className="mb-4 rounded-md bg-gray-50 p-4 shadow">
+                  <summary className="cursor-pointer font-medium text-lg text-blue-700">{faq.q}</summary>
+                  <p className="mt-2 text-gray-700">{faq.a}</p>
+                </details>
+              ))}
+
+              <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                  __html: JSON.stringify({
+                    "@context": "https://schema.org",
+                    "@type": "FAQPage",
+                    mainEntity: faqs.map((faq) => ({
+                      "@type": "Question",
+                      name: faq.q,
+                      acceptedAnswer: {
+                        "@type": "Answer",
+                        text: faq.a,
+                      },
+                    })),
+                  }),
+                }}
+              />
+            </div>
+          </section>
+        )}
+      </div>
+    </>
   )
 }

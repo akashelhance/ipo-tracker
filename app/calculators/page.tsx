@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   description:
     "Free online investment calculators for SIP, Lumpsum, FD, PPF, NPS, Retirement planning and more. Calculate returns, plan your investments and achieve your financial goals.",
   keywords:
-    "investment calculator, SIP calculator, FD calculator, PPF calculator, NPS calculator, retirement calculator, financial planning tools",
+    "investment calculator, SIP calculator, FD calculator, PPF calculator, NPS calculator, retirement calculator, financial planning tools, AllCalcify",
   openGraph: {
     title: "Investment Calculators Hub - Free Financial Planning Tools",
     description:
@@ -152,7 +152,7 @@ export default function CalculatorsPage() {
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Choose Your Calculator</h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Select from our range of financial calculators to plan your investments and achieve your financial goals
+            Select from our range of financial calculators to plan your investments and achieve your financial goals.
           </p>
         </div>
 
@@ -165,7 +165,6 @@ export default function CalculatorsPage() {
                   className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${calculator.gradient} p-6 text-white shadow-lg transition-all duration-300 hover:shadow-2xl hover:scale-105 hover:-translate-y-1`}
                 >
                   <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
                   <div className="relative z-10">
                     <div className="flex items-center justify-between mb-4">
                       <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm">
@@ -173,13 +172,10 @@ export default function CalculatorsPage() {
                       </div>
                       <div className="text-xs bg-white/20 px-2 py-1 rounded-full backdrop-blur-sm">Free</div>
                     </div>
-
                     <h3 className="text-xl font-bold mb-3 group-hover:text-white/90 transition-colors">
                       {calculator.title}
                     </h3>
-
                     <p className="text-white/80 text-sm leading-relaxed mb-4">{calculator.description}</p>
-
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-medium bg-white/20 px-3 py-1 rounded-full backdrop-blur-sm">
                         Calculate Now
@@ -203,7 +199,19 @@ export default function CalculatorsPage() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Why Use Our Calculators?</h2>
-            <p className="text-lg text-gray-600">Professional-grade financial planning tools at your fingertips</p>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              Our website{" "}
+              <Link
+                href="https://www.allcalcify.com"
+                target="_blank"
+                className="text-blue-600 hover:underline font-semibold"
+              >
+                AllCalcify.com
+              </Link>{" "}
+              is our own platform, built to provide accurate, fast, and user-friendly calculators for finance, health,
+              fitness, math, and everyday needs. From SIP and FD returns to BMI and unit conversions, AllCalcify is
+              designed to help you save time, make informed decisions, and plan with confidence — all in one place.
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

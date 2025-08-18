@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { buybacks } from "@/lib/buyback-data"
 import { BuybackSearchForm } from "@/components/buyback-search-form"
 import {
   TrendingUp,
@@ -17,9 +16,63 @@ import {
 
 // Import the CTA button component at the top of the file
 import { CTAButton } from "@/components/cta-button"
+import OtherInvestmentOptionWithDemat from "@/components/OtherInvestmentOptionWithDemat"
+
+interface BuybackApiResponse {
+  id: number
+  company_name: string
+  slug: string
+  is_published: boolean
+  status: "upcoming" | "open" | "closed"
+  record_date: string
+  price_per_share: string
+  total_offer_amount: string
+  buyback_type: string
+}
+
+interface BuybackData {
+  companyName: string
+  slug: string
+  status: "Open" | "Upcoming" | "Closed"
+  recordDate: string
+  offerPrice: number
+  marketPrice: number
+  buybackSize: string
+  buybackType: string
+}
 
 interface PageProps {
   searchParams: Promise<{ search?: string }>
+}
+
+async function fetchBuybacks(): Promise<BuybackData[]> {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/buybacks/public-list`, {
+      cache: "no-store", // Always fetch fresh data
+    })
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch buybacks")
+    }
+
+    const apiData: BuybackApiResponse[] = await response.json()
+
+    return apiData
+      .filter((item) => item.is_published)
+      .map((item) => ({
+        companyName: item.company_name,
+        slug: item.slug,
+        status: item.status === "upcoming" ? "Upcoming" : item.status === "open" ? "Open" : "Closed",
+        recordDate: item.record_date,
+        offerPrice: Number.parseFloat(item.price_per_share.replace(/[^\d.]/g, "")) || 0,
+        marketPrice: Number.parseFloat(item.price_per_share.replace(/[^\d.]/g, "")) * 0.9 || 0, // Estimate market price as 90% of offer price
+        buybackSize: item.total_offer_amount,
+        buybackType: item.buyback_type,
+      }))
+  } catch (error) {
+    console.error("Error fetching buybacks:", error)
+    return [] // Return empty array on error
+  }
 }
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -118,6 +171,8 @@ function getPremiumDiscount(offerPrice: number, marketPrice: number) {
 
 export default async function ShareBuybackOffersPage({ searchParams }: PageProps) {
   const { search } = await searchParams
+
+  const buybacks = await fetchBuybacks()
 
   // Filter buybacks based on search query
   const filteredBuybacks = search
@@ -472,63 +527,14 @@ export default async function ShareBuybackOffersPage({ searchParams }: PageProps
         </div>
 
         {/* Bottom Navigation */}
-        <div className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-2xl shadow-xl border border-gray-200 p-8 mb-12">
-          <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">Explore More Investment Tools</h3>
-
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <Link
-              href="/upcoming-ipo-calendar"
-              className="group bg-white/80 backdrop-blur-sm rounded-xl p-6 text-center hover:bg-white transition-all duration-300 transform hover:scale-105 shadow-lg border border-white/50"
-            >
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center mx-auto mb-3">
-                <Calendar className="h-6 w-6 text-white" />
-              </div>
-              <h4 className="font-semibold text-gray-900 mb-2">IPO Calendar</h4>
-              <p className="text-sm text-gray-600">Upcoming IPOs</p>
-            </Link>
-
-            <Link
-              href="/ipo-subscription-status"
-              className="group bg-white/80 backdrop-blur-sm rounded-xl p-6 text-center hover:bg-white transition-all duration-300 transform hover:scale-105 shadow-lg border border-white/50"
-            >
-              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center mx-auto mb-3">
-                <Users className="h-6 w-6 text-white" />
-              </div>
-              <h4 className="font-semibold text-gray-900 mb-2">Subscription Status</h4>
-              <p className="text-sm text-gray-600">Live IPO Data</p>
-            </Link>
-
-            <Link
-              href="/ipo-grey-market-premium"
-              className="group bg-white/80 backdrop-blur-sm rounded-xl p-6 text-center hover:bg-white transition-all duration-300 transform hover:scale-105 shadow-lg border border-white/50"
-            >
-              <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center mx-auto mb-3">
-                <TrendingUp className="h-6 w-6 text-white" />
-              </div>
-              <h4 className="font-semibold text-gray-900 mb-2">IPO GMP</h4>
-              <p className="text-sm text-gray-600">Grey Market Premium</p>
-            </Link>
-
-            <Link
-              href="/stock-brokers-comparison"
-              className="group bg-white/80 backdrop-blur-sm rounded-xl p-6 text-center hover:bg-white transition-all duration-300 transform hover:scale-105 shadow-lg border border-white/50"
-            >
-              <div className="w-12 h-12 bg-gradient-to-br from-violet-500 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-3">
-                <Building2 className="h-6 w-6 text-white" />
-              </div>
-              <h4 className="font-semibold text-gray-900 mb-2">Broker Comparison</h4>
-              <p className="text-sm text-gray-600">Compare Brokers</p>
-            </Link>
-          </div>
-        </div>
+       <OtherInvestmentOptionWithDemat/>
 
         {/* FAQ section */}
         {faqs.length > 0 && (
           <section className="mt-16 mb-12">
-        <h2 className="text-3xl font-bold text-gray-900 mb-6 border-b border-gray-300 pb-2">
-  Frequently Asked Questions
-</h2>
-
+            <h2 className="text-3xl font-bold text-gray-900 mb-6 border-b border-gray-300 pb-2">
+              Frequently Asked Questions
+            </h2>
 
             {faqs.map((faq, idx) => (
               <details key={idx} className="mb-4 rounded-md bg-gray-50 p-4 shadow">

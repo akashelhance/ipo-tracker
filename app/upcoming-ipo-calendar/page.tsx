@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { ipos } from "@/lib/ipo-data"
 import { SearchForm } from "@/components/search-form"
 import { CTAButton } from "@/components/cta-button"
 import {
@@ -15,9 +14,31 @@ import {
   Target,
   DollarSign,
 } from "lucide-react"
+import OtherInvestmentOptionWithDemat from "@/components/OtherInvestmentOptionWithDemat";
+
+interface IPO {
+  ipo_name:String,
+  title: string
+  slug: string
+  ipo_type: string | null
+  published_on: string
+  issue_type: string
+  price_band_text: string
+  lot_size_text: string
+  gmp_text: string
+  listing: string[]
+  timeline: {
+    open_date?: string
+    close_date?: string
+    allotment_date?: string
+    refunds_date?: string
+    credit_to_demat_date?: string
+    listing_date?: string
+  }
+}
 
 interface PageProps {
-  searchParams: Promise<{ search?: string }>
+  searchParams: { search?: string }
 }
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -70,7 +91,8 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-function formatDate(dateString: string): string {
+function formatDate(dateString?: string): string {
+  if (!dateString) return "N/A"
   const date = new Date(dateString)
   return date.toLocaleDateString("en-IN", {
     day: "2-digit",
@@ -79,27 +101,52 @@ function formatDate(dateString: string): string {
   })
 }
 
+function extractPriceBand(priceBandText: string): { low: number; high: number } {
+  const matches = priceBandText.match(/₹\s?([\d,.]+)\s?to\s?₹\s?([\d,.]+)/i)
+  if (!matches) return { low: 0, high: 0 }
+  const low = parseFloat(matches[1].replace(/,/g, ""))
+  const high = parseFloat(matches[2].replace(/,/g, ""))
+  return { low, high }
+}
+
 function formatPriceBand(low: number, high: number): string {
-  return `₹${low} - ₹${high}`
+  if (!low && !high) return "N/A"
+  return `₹${low.toLocaleString("en-IN")} - ₹${high.toLocaleString("en-IN")}`
 }
 
 export default async function IPOCalendarPage({ searchParams }: PageProps) {
-  const { search } = await searchParams
+  const search = searchParams?.search || ""
 
-  // Filter IPOs based on search query
-  const filteredIPOs = search
-    ? ipos.filter((ipo) => ipo.companyName.toLowerCase().includes(search.toLowerCase()))
-    : ipos
+  // Fetch IPO data server-side with no cache (fresh every request)
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ipos/light`, {
+    cache: "no-store",
+  })
 
-  // Calculate statistics
-  const mainboardIPOs = filteredIPOs.filter((ipo) => ipo.ipoType === "Mainboard").length
-  const smeIPOs = filteredIPOs.filter((ipo) => ipo.ipoType === "SME").length
-  const totalValue = filteredIPOs.reduce((sum, ipo) => {
-    const value = Number.parseFloat(ipo.ipoSize.replace(/[^\d.]/g, ""))
-    return sum + value
+  if (!res.ok) {
+    throw new Error("Failed to fetch IPO data")
+  }
+
+  const data = await res.json()
+  let ipos: IPO[] = data.docs || []
+
+  // Filter by search query (case insensitive)
+  if (search) {
+    ipos = ipos.filter((ipo) =>
+      ipo.title.toLowerCase().includes(search.toLowerCase())
+    )
+  }
+
+  // Calculate stats
+  const mainboardIPOs = ipos.filter((ipo) => ipo.ipo_type === "Mainboard").length
+  const smeIPOs = ipos.filter((ipo) => ipo.ipo_type === "SME").length
+  const totalValue = ipos.reduce((sum, ipo) => {
+    const { low, high } = extractPriceBand(ipo.price_band_text)
+    const lotSize = parseInt(ipo.lot_size_text) || 1
+    const avgPrice = (low + high) / 2 || 0
+    return sum + avgPrice * lotSize
   }, 0)
 
-  // Add FAQ data
+  // FAQ data
   const faqs = [
     {
       q: "What is an IPO?",
@@ -137,7 +184,7 @@ export default async function IPOCalendarPage({ searchParams }: PageProps) {
 
   return (
     <>
-      {/* SEO Schema Markup */}
+      {/* SEO JSON-LD */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -152,25 +199,25 @@ export default async function IPOCalendarPage({ searchParams }: PageProps) {
               "@type": "ItemList",
               name: "Upcoming IPOs 2025",
               description: "List of upcoming Initial Public Offerings in India for 2025",
-              numberOfItems: filteredIPOs.length,
-              itemListElement: filteredIPOs.map((ipo, index) => ({
+              numberOfItems: ipos.length,
+              itemListElement: ipos.map((ipo, index) => ({
                 "@type": "ListItem",
                 position: index + 1,
                 item: {
                   "@type": "FinancialProduct",
-                  name: `${ipo.companyName} IPO`,
-                  description: `${ipo.companyName} Initial Public Offering with price band ₹${ipo.priceBandLow}-₹${ipo.priceBandHigh}`,
+                  name: `${ipo.title} IPO`,
+                  description: `${ipo.title} Initial Public Offering with price band ${ipo.price_band_text}`,
                   url: `https://yoursite.com/ipo/${ipo.slug}`,
                   provider: {
                     "@type": "Organization",
-                    name: ipo.companyName,
+                    name: ipo.title,
                   },
                   offers: {
                     "@type": "Offer",
-                    price: `${ipo.priceBandLow}-${ipo.priceBandHigh}`,
+                    price: ipo.price_band_text,
                     priceCurrency: "INR",
-                    validFrom: ipo.openDate,
-                    validThrough: ipo.closeDate,
+                    validFrom: ipo.timeline.open_date,
+                    validThrough: ipo.timeline.close_date,
                   },
                 },
               })),
@@ -236,7 +283,7 @@ export default async function IPOCalendarPage({ searchParams }: PageProps) {
                 <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl">
                   <TrendingUp className="h-6 w-6 text-white" />
                 </div>
-                <div className="text-3xl font-bold">{filteredIPOs.length}</div>
+                <div className="text-3xl font-bold">{ipos.length}</div>
               </div>
               <div className="text-blue-100 text-lg font-medium">Total IPOs</div>
               <div className="text-blue-200 text-sm mt-1">Active opportunities</div>
@@ -264,16 +311,21 @@ export default async function IPOCalendarPage({ searchParams }: PageProps) {
               <div className="text-purple-200 text-sm mt-1">Growth opportunities</div>
             </div>
 
-            <div className="group bg-gradient-to-br from-orange-500 to-red-600 p-6 rounded-2xl shadow-xl text-white transform hover:scale-105 transition-all duration-300">
-              <div className="flex items-center justify-between mb-4">
-                <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl">
-                  <DollarSign className="h-6 w-6 text-white" />
-                </div>
-                <div className="text-3xl font-bold">₹{totalValue.toFixed(0)}K</div>
-              </div>
-              <div className="text-orange-100 text-lg font-medium">Total Value</div>
-              <div className="text-orange-200 text-sm mt-1">Crores to be raised</div>
-            </div>
+         <div className="group bg-gradient-to-br from-orange-500 to-red-600 p-6 rounded-2xl shadow-xl text-white transform hover:scale-105 transition-all duration-300">
+  <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl mb-4 inline-flex items-center">
+    <DollarSign className="h-6 w-6 text-white mr-2" />
+    {/* Optionally, you can keep this icon only or remove this entire div if you want */}
+  </div>
+
+  <Link
+    href="https://zerodha.com/?c=QT4498&s=CONSOLE"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="text-orange-100 text-lg font-medium hover:underline inline-block"
+  >
+    Open Demat with Zerodha
+  </Link>
+</div>
           </div>
 
           {/* Enhanced Table Container */}
@@ -290,105 +342,129 @@ export default async function IPOCalendarPage({ searchParams }: PageProps) {
             </div>
 
             {/* Enhanced Table */}
-            <div className="overflow-x-auto">
-              {filteredIPOs.length > 0 ? (
-                <table className="w-full">
-                  <thead className="bg-gradient-to-r from-gray-50 to-slate-100">
-                    <tr>
-                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                        Company Details
-                      </th>
-                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                        Timeline
-                      </th>
-                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                        Price Band
-                      </th>
-                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                        Investment
-                      </th>
-                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                        Exchange
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-100">
-                    {filteredIPOs.map((ipo, index) => (
-                      <tr
-                        key={ipo.documentId}
-                        className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-300 group"
-                      >
-                        <td className="px-6 py-6">
-                          <div className="flex items-center">
-                            <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold text-lg">
-                              {ipo.companyName.charAt(0)}
-                            </div>
-                            <div className="ml-4">
-                              <Link
-                                href={`/ipo/${ipo.slug}`}
-                                className="text-lg font-semibold text-gray-900 hover:text-blue-600 transition-colors group-hover:text-blue-700"
-                              >
-                                {ipo.companyName}
-                                <ArrowRight className="inline h-4 w-4 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" />
-                              </Link>
-                              <div className="flex items-center mt-1">
-                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800">
-                                  {ipo.ipoType}
-                                </span>
-                                <span className="ml-2 text-sm text-gray-500">{ipo.ipoSize}</span>
-                              </div>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-6">
-                          <div className="space-y-2">
-                            <div className="flex items-center text-sm">
-                              <Calendar className="h-4 w-4 text-green-500 mr-2" />
-                              <span className="font-medium text-gray-900">Opens:</span>
-                              <span className="ml-2 text-green-600 font-semibold">{formatDate(ipo.openDate)}</span>
-                            </div>
-                            <div className="flex items-center text-sm">
-                              <Calendar className="h-4 w-4 text-red-500 mr-2" />
-                              <span className="font-medium text-gray-900">Closes:</span>
-                              <span className="ml-2 text-red-600 font-semibold">{formatDate(ipo.closeDate)}</span>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-6">
-                          <div className="text-lg font-bold text-gray-900 mb-1">
-                            {formatPriceBand(ipo.priceBandLow, ipo.priceBandHigh)}
-                          </div>
-                          <div className="text-sm text-gray-500">Price Range</div>
-                        </td>
-                        <td className="px-6 py-6">
-                          <div className="text-lg font-bold text-purple-600 mb-1">{ipo.marketLot}</div>
-                          <div className="text-sm text-gray-500">Lot Size</div>
-                          <div className="text-xs text-gray-400 mt-1">
-                            Min: ₹{(ipo.priceBandHigh * ipo.marketLot).toLocaleString("en-IN")}
-                          </div>
-                        </td>
-                        <td className="px-6 py-6">
-                          <span className="inline-flex items-center px-3 py-2 rounded-full text-sm font-semibold bg-gradient-to-r from-emerald-100 to-teal-100 text-emerald-800 border border-emerald-200">
-                            <Building2 className="h-4 w-4 mr-1" />
-                            {ipo.exchangePlatform}
+         <div className="overflow-x-auto">
+      {ipos.length > 0 ? (
+        <table className="w-full">
+          <thead className="bg-gradient-to-r from-gray-50 to-slate-100">
+            <tr>
+              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                Company Details
+              </th>
+              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                IPO Type
+              </th>
+              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                Timeline
+              </th>
+              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                Price Band
+              </th>
+              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                Investment
+              </th>
+              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                Exchange
+              </th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-100">
+            {ipos.map((ipo) => {
+              const { low, high } = extractPriceBand(ipo.price_band_text || "")
+              const lotSize = parseInt(ipo.lot_size_text || "1") || 1
+
+              return (
+                <tr
+                  key={ipo.slug}
+                  className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-300 group"
+                >
+                  {/* Company Details */}
+                  <td className="px-6 py-6">
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold text-lg">
+                        {ipo.title.charAt(0)}
+                      </div>
+                      <div className="ml-4">
+                        <Link
+                          href={`/ipo/${ipo.slug}`}
+                          className="text-lg font-semibold text-gray-900 hover:text-blue-600 transition-colors group-hover:text-blue-700"
+                        >
+                          {ipo.ipo_name}
+                          <ArrowRight className="inline h-4 w-4 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </Link>
+                        <div className="flex items-center mt-1">
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800">
+                            {ipo.issue_type || "N/A"}
                           </span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              ) : (
-                <div className="text-center py-16">
-                  <div className="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <TrendingUp className="h-12 w-12 text-gray-400" />
-                  </div>
-                  <div className="text-gray-500 text-xl mb-2">No IPOs found</div>
-                  <p className="text-gray-400">
-                    {search ? `No IPOs match "${search}"` : "No IPOs available at the moment"}
-                  </p>
-                </div>
-              )}
-            </div>
+                          <span className="ml-2 text-sm text-gray-500">{ipo.lot_size_text}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+
+                  {/* IPO Type */}
+                  <td className="px-6 py-6">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-green-100 to-emerald-100 text-green-800">
+                      {ipo.ipo_type || "N/A"}
+                    </span>
+                  </td>
+
+                  {/* Timeline */}
+                  <td className="px-6 py-6">
+                    <div className="space-y-2">
+                      <div className="flex items-center text-sm">
+                        <Calendar className="h-4 w-4 text-green-500 mr-2" />
+                        <span className="font-medium text-gray-900">Opens:</span>
+                        <span className="ml-2 text-green-600 font-semibold">
+                          {formatDate(ipo.timeline.open_date || ipo.published_on)}
+                        </span>
+                      </div>
+                      <div className="flex items-center text-sm">
+                        <Calendar className="h-4 w-4 text-red-500 mr-2" />
+                        <span className="font-medium text-gray-900">Closes:</span>
+                        <span className="ml-2 text-red-600 font-semibold">
+                          {formatDate(ipo.timeline.close_date || ipo.published_on)}
+                        </span>
+                      </div>
+                    </div>
+                  </td>
+
+                  {/* Price Band */}
+                  <td className="px-6 py-6">
+                    <div className="text-lg font-bold text-gray-900 mb-1">{`₹${low.toLocaleString()} - ₹${high.toLocaleString()}`}</div>
+                    <div className="text-sm text-gray-500">Price Range</div>
+                  </td>
+
+                  {/* Investment */}
+                  <td className="px-6 py-6">
+                    <div className="text-lg font-bold text-purple-600 mb-1">{lotSize}</div>
+                    <div className="text-sm text-gray-500">Lot Size</div>
+                    <div className="text-xs text-gray-400 mt-1">
+                      Min: ₹{(high * lotSize).toLocaleString("en-IN")}
+                    </div>
+                  </td>
+
+                  {/* Exchange */}
+                  <td className="px-6 py-6">
+                    <span className="inline-flex items-center px-3 py-2 rounded-full text-sm font-semibold bg-gradient-to-r from-emerald-100 to-teal-100 text-emerald-800 border border-emerald-200">
+                      <Building2 className="h-4 w-4 mr-1" />
+                      {ipo.listing.join(", ")}
+                    </span>
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      ) : (
+        <div className="text-center py-16">
+          <div className="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
+            <TrendingUp className="h-12 w-12 text-gray-400" />
+          </div>
+          <div className="text-gray-500 text-xl mb-2">No IPOs found</div>
+          <p className="text-gray-400">{search ? `No IPOs match "${search}"` : "No IPOs available at the moment"}</p>
+        </div>
+      )}
+    </div>
           </div>
 
           {/* Comprehensive IPO Information Section */}
@@ -519,65 +595,16 @@ export default async function IPOCalendarPage({ searchParams }: PageProps) {
           </div>
 
           {/* Bottom Navigation */}
-          <div className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-2xl shadow-xl border border-gray-200 p-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">Explore More Investment Tools</h3>
-
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              <Link
-                href="/ipo-grey-market-premium"
-                className="group bg-white/80 backdrop-blur-sm rounded-xl p-6 text-center hover:bg-white transition-all duration-300 transform hover:scale-105 shadow-lg border border-white/50"
-              >
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <TrendingUp className="h-6 w-6 text-white" />
-                </div>
-                <h4 className="font-semibold text-gray-900 mb-2">IPO GMP</h4>
-                <p className="text-sm text-gray-600">Grey Market Premium</p>
-              </Link>
-
-              <Link
-                href="/ipo-subscription-status"
-                className="group bg-white/80 backdrop-blur-sm rounded-xl p-6 text-center hover:bg-white transition-all duration-300 transform hover:scale-105 shadow-lg border border-white/50"
-              >
-                <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <Users className="h-6 w-6 text-white" />
-                </div>
-                <h4 className="font-semibold text-gray-900 mb-2">Subscription Status</h4>
-                <p className="text-sm text-gray-600">Live IPO Data</p>
-              </Link>
-
-              <Link
-                href="/share-buyback-offers"
-                className="group bg-white/80 backdrop-blur-sm rounded-xl p-6 text-center hover:bg-white transition-all duration-300 transform hover:scale-105 shadow-lg border border-white/50"
-              >
-                <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <Star className="h-6 w-6 text-white" />
-                </div>
-                <h4 className="font-semibold text-gray-900 mb-2">Buyback Offers</h4>
-                <p className="text-sm text-gray-600">Share Buybacks</p>
-              </Link>
-
-              <Link
-                href="/stock-brokers-comparison"
-                className="group bg-white/80 backdrop-blur-sm rounded-xl p-6 text-center hover:bg-white transition-all duration-300 transform hover:scale-105 shadow-lg border border-white/50"
-              >
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <Building2 className="h-6 w-6 text-white" />
-                </div>
-                <h4 className="font-semibold text-gray-900 mb-2">Broker Comparison</h4>
-                <p className="text-sm text-gray-600">Compare Brokers</p>
-              </Link>
-            </div>
-          </div>
+        <OtherInvestmentOptionWithDemat />
         </div>
 
-        {/* Add FAQ section before the closing div */}
+        {/* FAQ Section */}
         {faqs.length > 0 && (
           <section className="mt-16">
             <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-gray-900 mb-6 border-b border-gray-300 pb-2">
-  Frequently Asked Questions
-</h2>
-
+              <h2 className="text-3xl font-bold text-gray-900 mb-6 border-b border-gray-300 pb-2">
+                Frequently Asked Questions
+              </h2>
 
               {faqs.map((faq, idx) => (
                 <details key={idx} className="mb-4 rounded-md bg-gray-50 p-4 shadow">
