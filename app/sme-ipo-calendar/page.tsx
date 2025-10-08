@@ -120,9 +120,9 @@ function formatPriceBand(low: number, high: number): string {
 export default async function SMEIPOCalendarPage({ searchParams }: PageProps) {
   const search = searchParams?.search || ""
 
-  // Fetch IPO data server-side with no cache (fresh every request)
-  const res = await fetch(`http://localhost:3000/api/ipos/light`, {
-    cache: "no-store",
+  // Fetch IPO data server-side with ISR (revalidates every 5 minutes)
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/ipos/light`, {
+    next: { revalidate: 300 }, // Cache for 5 minutes
   })
 
   if (!res.ok) {

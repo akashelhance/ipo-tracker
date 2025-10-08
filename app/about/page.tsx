@@ -1,29 +1,32 @@
 import type { Metadata } from "next"
-import { CheckCircle, Users, TrendingUp, Shield, Clock, Award } from "lucide-react"
+import { CheckCircle, Users, TrendingUp, Shield, Clock, Award, Mail, Phone, MapPin, Linkedin, Twitter, Instagram, Youtube, Facebook } from "lucide-react"
+import Link from "next/link"
+import { siteConfig, getSocialLinks, getFullAddress } from "@/config/config"
 
 export const metadata: Metadata = {
-  title: "About Us - Leading IPO & Stock Market Information Platform",
-  description:
-    "Learn about our mission to provide comprehensive IPO information, Grey Market Premium data, buyback offers, and stock market insights to Indian investors.",
+  title: `About Us - ${siteConfig.siteName} | Leading IPO & Stock Market Information Platform`,
+  description: siteConfig.siteDescription,
   keywords: "about us, IPO platform, stock market information, GMP data, investment research, financial services India",
 }
 
 export default function AboutPage() {
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
+      {/* Hero Section - Using Global Config */}
       <section className="bg-gradient-to-br from-blue-50 via-white to-purple-50 py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
               About{" "}
               <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                IPOTracker
+                {siteConfig.siteName}
               </span>
             </h1>
             <p className="text-xl text-gray-600 leading-relaxed">
-              Your trusted partner in navigating the Indian stock market with comprehensive IPO information, real-time
-              data, and expert insights to make informed investment decisions.
+              {siteConfig.siteDescription}
+            </p>
+            <p className="text-lg text-blue-600 font-medium mt-4">
+              {siteConfig.siteTagline}
             </p>
           </div>
         </div>
@@ -49,20 +52,20 @@ export default function AboutPage() {
               <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-8 rounded-2xl">
                 <div className="grid grid-cols-2 gap-6">
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-blue-600 mb-2">50K+</div>
+                    <div className="text-3xl font-bold text-blue-600 mb-2">{siteConfig.stats.totalUsers}</div>
                     <div className="text-sm text-gray-600">Active Users</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-purple-600 mb-2">500+</div>
+                    <div className="text-3xl font-bold text-purple-600 mb-2">{siteConfig.stats.totalIPOs}</div>
                     <div className="text-sm text-gray-600">IPOs Tracked</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-green-600 mb-2">99.9%</div>
-                    <div className="text-sm text-gray-600">Uptime</div>
+                    <div className="text-3xl font-bold text-green-600 mb-2">{siteConfig.stats.accuracy}</div>
+                    <div className="text-sm text-gray-600">Accuracy</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-orange-600 mb-2">24/7</div>
-                    <div className="text-sm text-gray-600">Data Updates</div>
+                    <div className="text-3xl font-bold text-orange-600 mb-2">Since {siteConfig.stats.foundedYear}</div>
+                    <div className="text-sm text-gray-600">Trusted Platform</div>
                   </div>
                 </div>
               </div>
@@ -236,6 +239,115 @@ export default function AboutPage() {
         </div>
       </section> */}
 
+      {/* Contact & Social Media Section - Using Global Config */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">Get in Touch</h2>
+              <p className="text-lg text-gray-600">Connect with us through multiple channels</p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-12">
+              {/* Contact Information */}
+              <div className="space-y-6">
+                <h3 className="text-2xl font-semibold text-gray-900 mb-6">Contact Information</h3>
+                
+                <div className="flex items-start space-x-4">
+                  <div className="bg-blue-100 p-3 rounded-lg">
+                    <Mail className="h-6 w-6 text-blue-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-1">Email</h4>
+                    <a href={`mailto:${siteConfig.contactEmail}`} className="text-blue-600 hover:text-blue-700">
+                      {siteConfig.contactEmail}
+                    </a>
+                    <br />
+                    <a href={`mailto:${siteConfig.supportEmail}`} className="text-blue-600 hover:text-blue-700 text-sm">
+                      {siteConfig.supportEmail}
+                    </a>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-4">
+                  <div className="bg-green-100 p-3 rounded-lg">
+                    <Phone className="h-6 w-6 text-green-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-1">Phone</h4>
+                    <a href={`tel:${siteConfig.company.phone}`} className="text-gray-600 hover:text-gray-900">
+                      {siteConfig.company.phone}
+                    </a>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-4">
+                  <div className="bg-purple-100 p-3 rounded-lg">
+                    <MapPin className="h-6 w-6 text-purple-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-gray-900 mb-1">Address</h4>
+                    <p className="text-gray-600">{siteConfig.company.name}</p>
+                    <p className="text-gray-600">{getFullAddress()}</p>
+                    <p className="text-sm text-gray-500 mt-1">{siteConfig.company.registrationNumber}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Social Media Links - Dynamically Generated */}
+              <div className="space-y-6">
+                <h3 className="text-2xl font-semibold text-gray-900 mb-6">Follow Us</h3>
+                <p className="text-gray-600 mb-6">
+                  Stay updated with the latest IPO news, market insights, and investment tips by following us on social media.
+                </p>
+                
+                <div className="space-y-4">
+                  {getSocialLinks().map((social) => {
+                    // Map platform names to icons
+                    const iconMap: { [key: string]: any } = {
+                      Twitter: Twitter,
+                      Facebook: Facebook,
+                      Linkedin: Linkedin,
+                      Instagram: Instagram,
+                      Youtube: Youtube,
+                    }
+                    
+                    const Icon = iconMap[social.name] || Users
+                    
+                    // Map platform names to colors
+                    const colorMap: { [key: string]: string } = {
+                      Twitter: "text-blue-400 bg-blue-50 hover:bg-blue-100",
+                      Facebook: "text-blue-600 bg-blue-50 hover:bg-blue-100",
+                      Linkedin: "text-blue-700 bg-blue-50 hover:bg-blue-100",
+                      Instagram: "text-pink-600 bg-pink-50 hover:bg-pink-100",
+                      Youtube: "text-red-600 bg-red-50 hover:bg-red-100",
+                    }
+                    
+                    const colorClass = colorMap[social.name] || "text-gray-600 bg-gray-50 hover:bg-gray-100"
+                    
+                    return (
+                      <a
+                        key={social.platform}
+                        href={social.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`flex items-center space-x-4 p-4 rounded-lg transition-all duration-200 ${colorClass}`}
+                      >
+                        <Icon className="h-6 w-6" />
+                        <div>
+                          <h4 className="font-semibold text-gray-900">{social.name}</h4>
+                          <p className="text-sm text-gray-600">{social.url}</p>
+                        </div>
+                      </a>
+                    )
+                  })}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="py-16 bg-gradient-to-r from-blue-600 to-purple-600">
         <div className="container mx-auto px-4">
@@ -245,18 +357,18 @@ export default function AboutPage() {
               Join thousands of investors who trust us for their IPO and stock market information needs.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
+              <Link
                 href="/upcoming-ipo-calendar"
                 className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
               >
                 Explore IPOs
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/contact"
                 className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors"
               >
                 Contact Us
-              </a>
+              </Link>
             </div>
           </div>
         </div>

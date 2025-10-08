@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { Mail, Phone, MapPin, Clock, Send, MessageCircle } from "lucide-react"
+import { siteConfig } from "@/config/config"
 
 export const metadata: Metadata = {
   title: "Contact Us - Get in Touch with IPO & Stock Market Experts",
@@ -154,8 +155,8 @@ export default function ContactPage() {
                     <div>
                       <h3 className="font-semibold text-gray-900 mb-1">Email Us</h3>
                       <p className="text-gray-600 mb-2">Get in touch via email for detailed inquiries</p>
-                      <a href="mailto:info@ipotracker.com" className="text-blue-600 hover:text-blue-700 font-medium">
-                        info@ipotracker.com
+                      <a href={`mailto:${siteConfig.contactEmail}`} className="text-blue-600 hover:text-blue-700 font-medium">
+                        {siteConfig.contactEmail}
                       </a>
                     </div>
                   </div>
@@ -167,8 +168,8 @@ export default function ContactPage() {
                     <div>
                       <h3 className="font-semibold text-gray-900 mb-1">Call Us</h3>
                       <p className="text-gray-600 mb-2">Speak directly with our support team</p>
-                      <a href="tel:+911234567890" className="text-green-600 hover:text-green-700 font-medium">
-                        +91 12345 67890
+                      <a href={`tel:${siteConfig.company.phone.replace(/\s+/g, '')}`} className="text-green-600 hover:text-green-700 font-medium">
+                        {siteConfig.company.phone}
                       </a>
                     </div>
                   </div>
@@ -181,11 +182,11 @@ export default function ContactPage() {
                       <h3 className="font-semibold text-gray-900 mb-1">Visit Us</h3>
                       <p className="text-gray-600 mb-2">Our office location</p>
                       <address className="text-purple-600 not-italic">
-                        123 Business District,
+                        {siteConfig.company.address.street},
                         <br />
-                        Financial Center, Mumbai - 400001
+                        {siteConfig.company.address.city} - {siteConfig.company.address.postalCode}
                         <br />
-                        Maharashtra, India
+                        {siteConfig.company.address.state}, {siteConfig.company.address.country}
                       </address>
                     </div>
                   </div>
@@ -281,7 +282,7 @@ export default function ContactPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="mailto:info@ipotracker.com"
+                href={`mailto:${siteConfig.contactEmail}`}
                 className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
               >
                 Email Us Now

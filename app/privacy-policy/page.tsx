@@ -1,9 +1,10 @@
 import type { Metadata } from "next"
+import { siteConfig } from "@/config/config"
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | IPOTracker",
+  title: `Privacy Policy | ${siteConfig.siteName}`,
   description:
-    "Learn how IPOTracker collects, uses, and protects your personal information. Our privacy policy explains your rights and our responsibilities regarding your data.",
+    `Learn how ${siteConfig.siteName} collects, uses, and protects your personal information. Our privacy policy explains your rights and our responsibilities regarding your data.`,
 }
 
 export default function PrivacyPolicyPage() {
@@ -75,7 +76,7 @@ export default function PrivacyPolicyPage() {
           <section id="introduction">
             <h2 className="text-2xl font-bold mb-4">1. Introduction</h2>
             <p>
-              IPOTracker ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains
+              {siteConfig.siteName} ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains
               how we collect, use, disclose, and safeguard your information when you visit our website ipotracker.com
               and use our services.
             </p>
@@ -259,7 +260,7 @@ export default function PrivacyPolicyPage() {
             </p>
             <div className="mt-4 bg-gray-50 p-6 rounded-lg">
               <p>
-                <strong>IPOTracker</strong>
+                <strong>{siteConfig.siteName}</strong>
               </p>
               <p>
                 Email:{" "}

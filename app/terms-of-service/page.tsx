@@ -1,9 +1,10 @@
 import type { Metadata } from "next"
+import { siteConfig } from "@/config/config"
 
 export const metadata: Metadata = {
-  title: "Terms of Service | IPOTracker",
+  title: `Terms of Service | ${siteConfig.siteName}`,
   description:
-    "Read the terms and conditions governing the use of IPOTracker's website and services. Understand your rights and responsibilities as a user.",
+    `Read the terms and conditions governing the use of ${siteConfig.siteName}'s website and services. Understand your rights and responsibilities as a user.`,
 }
 
 export default function TermsOfServicePage() {
@@ -90,7 +91,7 @@ export default function TermsOfServicePage() {
           <section id="agreement">
             <h2 className="text-2xl font-bold mb-4">1. Agreement to Terms</h2>
             <p>
-              These Terms of Service ("Terms") constitute a legally binding agreement between you and IPOTracker ("we,"
+              These Terms of Service ("Terms") constitute a legally binding agreement between you and {siteConfig.siteName} ("we,"
               "our," or "us") governing your access to and use of the website ipotracker.com and any related services,
               features, content, or applications (collectively, the "Services").
             </p>
@@ -105,7 +106,7 @@ export default function TermsOfServicePage() {
             <p>
               The Services and their entire contents, features, and functionality (including but not limited to all
               information, software, text, displays, images, video, and audio, and the design, selection, and
-              arrangement thereof) are owned by IPOTracker, its licensors, or other providers of such material and are
+              arrangement thereof) are owned by {siteConfig.siteName}, its licensors, or other providers of such material and are
               protected by copyright, trademark, patent, trade secret, and other intellectual property or proprietary
               rights laws.
             </p>
@@ -167,12 +168,12 @@ export default function TermsOfServicePage() {
                 mail," "chain letter," "spam," or any other similar solicitation.
               </li>
               <li>
-                To impersonate or attempt to impersonate IPOTracker, an IPOTracker employee, another user, or any other
+                To impersonate or attempt to impersonate {siteConfig.siteName}, a {siteConfig.siteName} employee, another user, or any other
                 person or entity.
               </li>
               <li>
                 To engage in any other conduct that restricts or inhibits anyone's use or enjoyment of the Services, or
-                which may harm IPOTracker or users of the Services.
+                which may harm {siteConfig.siteName} or users of the Services.
               </li>
             </ul>
           </section>
@@ -196,7 +197,7 @@ export default function TermsOfServicePage() {
             </ul>
             <p className="mt-4">
               You understand and acknowledge that you are responsible for any User Content you submit or contribute, and
-              you, not IPOTracker, have full responsibility for such content, including its legality, reliability,
+              you, not {siteConfig.siteName}, have full responsibility for such content, including its legality, reliability,
               accuracy, and appropriateness.
             </p>
           </section>
@@ -252,7 +253,7 @@ export default function TermsOfServicePage() {
           <section id="indemnification" className="mt-8">
             <h2 className="text-2xl font-bold mb-4">9. Indemnification</h2>
             <p>
-              You agree to defend, indemnify, and hold harmless IPOTracker, its affiliates, licensors, and service
+              You agree to defend, indemnify, and hold harmless {siteConfig.siteName}, its affiliates, licensors, and service
               providers, and its and their respective officers, directors, employees, contractors, agents, licensors,
               suppliers, successors, and assigns from and against any claims, liabilities, damages, judgments, awards,
               losses, costs, expenses, or fees (including reasonable attorneys' fees) arising out of or relating to your
@@ -309,7 +310,7 @@ export default function TermsOfServicePage() {
             <p>If you have any questions about these Terms, please contact us at:</p>
             <div className="mt-4 bg-gray-50 p-6 rounded-lg">
               <p>
-                <strong>IPOTracker</strong>
+                <strong>{siteConfig.siteName}</strong>
               </p>
               <p>
                 Email:{" "}

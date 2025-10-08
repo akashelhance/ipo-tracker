@@ -330,8 +330,14 @@ export default function HomePage() {
     variant="outline"
     className="px-8 py-3 text-gray-800 border-gray-300 hover:bg-gray-100"
   >
-    <Link href="/calculators">
-      View All Calculators <span className="ml-2">→</span>
+       <Link
+      href="/calculators"
+      className="inline-flex items-center px-6 py-3 rounded-xl border border-gray-300 bg-white shadow-sm hover:bg-gray-100 hover:shadow-md transition-all duration-200 ease-in-out text-gray-800 font-medium text-lg"
+    >
+      View All Calculators
+      <span className="ml-2 text-xl transform transition-transform duration-200 group-hover:translate-x-1">
+        →
+      </span>
     </Link>
   </Button>
 </div>
@@ -341,7 +347,7 @@ export default function HomePage() {
       </section>
 
       {/* Latest Blog Posts Section */}
-      <section className="py-16 bg-white">
+      {/* <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Latest Market Insights</h2>
@@ -351,7 +357,7 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Blog Post 1 */}
+           
             <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
               <div className="relative h-48 w-full overflow-hidden rounded-t-lg">
                 <div className="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
@@ -383,7 +389,7 @@ export default function HomePage() {
               </CardContent>
             </Card>
 
-            {/* Blog Post 2 */}
+          
             <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
               <div className="relative h-48 w-full overflow-hidden rounded-t-lg">
                 <div className="w-full h-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
@@ -415,7 +421,7 @@ export default function HomePage() {
               </CardContent>
             </Card>
 
-            {/* Blog Post 3 */}
+         
             <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
               <div className="relative h-48 w-full overflow-hidden rounded-t-lg">
                 <div className="w-full h-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center">
@@ -462,7 +468,7 @@ export default function HomePage() {
 </div>
 
         </div>
-      </section>
+      </section> */}
 
       {/* Features Grid */}
       <section className="py-16 bg-gray-50">

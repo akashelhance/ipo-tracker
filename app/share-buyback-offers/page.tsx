@@ -45,10 +45,13 @@ interface PageProps {
   searchParams: Promise<{ search?: string }>
 }
 
+// Revalidate every 30 minutes for buyback data
+export const revalidate = 1800
+
 async function fetchBuybacks(): Promise<BuybackData[]> {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/buybacks/public-list`, {
-      cache: "no-store", // Always fetch fresh data
+      next: { revalidate: 1800 }, // Cache for 30 minutes
     })
 
     if (!response.ok) {

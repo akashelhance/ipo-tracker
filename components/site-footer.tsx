@@ -16,9 +16,14 @@ import {
   Gift,
   Calculator,
   MoreHorizontal,
+  Briefcase,
+  DollarSign,
+  Fuel,
+  Building2,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { siteConfig } from "@/config/config"
 
 export function SiteFooter() {
   return (
@@ -63,7 +68,7 @@ export function SiteFooter() {
         </div>
 
         {/* Main Footer Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-8 mb-12">
           {/* Company Section */}
           <div className="lg:col-span-1 space-y-6">
             <div>
@@ -72,12 +77,11 @@ export function SiteFooter() {
                   <TrendingUp className="h-6 w-6 text-white" />
                 </div>
                 <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                  IPOTracker
+                  {siteConfig.siteName}
                 </span>
               </div>
               <p className="text-gray-400 leading-relaxed mb-6">
-                India's most trusted platform for IPO insights, market analysis, and investment tools. Empowering smart
-                investment decisions since 2020.
+                {siteConfig.siteDescription}
               </p>
             </div>
 
@@ -85,17 +89,17 @@ export function SiteFooter() {
             <div className="grid grid-cols-3 gap-3">
               <div className="text-center p-3 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 transition-colors">
                 <Users className="h-5 w-5 text-blue-400 mx-auto mb-1" />
-                <div className="text-sm font-bold text-white">50K+</div>
+                <div className="text-sm font-bold text-white">{siteConfig.stats.totalUsers}</div>
                 <div className="text-xs text-gray-400">Users</div>
               </div>
               <div className="text-center p-3 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 transition-colors">
                 <Award className="h-5 w-5 text-purple-400 mx-auto mb-1" />
-                <div className="text-sm font-bold text-white">500+</div>
+                <div className="text-sm font-bold text-white">{siteConfig.stats.totalIPOs}</div>
                 <div className="text-xs text-gray-400">IPOs</div>
               </div>
               {/* <div className="text-center p-3 bg-white/5 rounded-lg border border-white/10 hover:bg-white/10 transition-colors">
                 <Shield className="h-5 w-5 text-green-400 mx-auto mb-1" />
-                <div className="text-sm font-bold text-white">99.9%</div>
+                <div className="text-sm font-bold text-white">{siteConfig.stats.accuracy}</div>
                 <div className="text-xs text-gray-400">Accuracy</div>
               </div> */}
             </div>
@@ -104,7 +108,7 @@ export function SiteFooter() {
             <div className="space-y-3">
               <div className="flex items-center space-x-3 text-sm text-gray-400 hover:text-white transition-colors">
                 <Mail className="h-4 w-4 text-blue-400" />
-                <Link href="mailto:info@ipotracker.com">info@ipotracker.com</Link>
+                <Link href={`mailto:${siteConfig.contactEmail}`}>{siteConfig.contactEmail}</Link>
               </div>
           
             </div>
@@ -122,13 +126,64 @@ export function SiteFooter() {
                 { href: "/sme-ipo-calendar", label: "SME IPOs" },
                 { href: "/ipo-grey-market-premium", label: "GMP Today" },
                 { href: "/ipo-subscription-status", label: "Subscription Status" },
-                { href: "/share-buyback-offers", label: "Buyback Offers" },
-                { href: "/allotment-status", label: "Allotment Status" },
               ].map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
                   className="group flex items-center text-sm text-gray-400 hover:text-blue-400 transition-all duration-200"
+                >
+                  <MoreHorizontal className="h-3 w-3 mr-2 opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0 transition-all duration-200" />
+                  <span className="group-hover:translate-x-1 transition-transform duration-200">{item.label}</span>
+                </Link>
+              ))}
+            </nav>
+          </div>
+
+          {/* Investment Options */}
+          <div className="space-y-6">
+            <h3 className="text-lg font-semibold text-white flex items-center">
+              <Briefcase className="h-5 w-5 mr-2 text-purple-400" />
+              Investments
+            </h3>
+            <nav className="space-y-3" aria-label="Investment options">
+              {[
+                { href: "/ncds", label: "NCDs" },
+                { href: "/rights-issues", label: "Rights Issues" },
+                { href: "/share-buyback-offers", label: "Buyback Offers" },
+                { href: "/bank-fd-rates", label: "Bank FD Rates" },
+                { href: "/bank-rd-rates", label: "Bank RD Rates" },
+              ].map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="group flex items-center text-sm text-gray-400 hover:text-purple-400 transition-all duration-200"
+                >
+                  <MoreHorizontal className="h-3 w-3 mr-2 opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0 transition-all duration-200" />
+                  <span className="group-hover:translate-x-1 transition-transform duration-200">{item.label}</span>
+                </Link>
+              ))}
+            </nav>
+          </div>
+
+          {/* Rates & Prices */}
+          <div className="space-y-6">
+            <h3 className="text-lg font-semibold text-white flex items-center">
+              <DollarSign className="h-5 w-5 mr-2 text-green-400" />
+              Rates & Prices
+            </h3>
+            <nav className="space-y-3" aria-label="Rates and prices">
+              {[
+                { href: "/gold-rates", label: "Gold Rates" },
+                { href: "/silver-rates", label: "Silver Rates" },
+                { href: "/petrol-rates", label: "Petrol Rates" },
+                { href: "/diesel-rates", label: "Diesel Rates" },
+                { href: "/cng-rates", label: "CNG Rates" },
+                { href: "/lpg-rates", label: "LPG Rates" },
+              ].map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="group flex items-center text-sm text-gray-400 hover:text-green-400 transition-all duration-200"
                 >
                   <MoreHorizontal className="h-3 w-3 mr-2 opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0 transition-all duration-200" />
                   <span className="group-hover:translate-x-1 transition-transform duration-200">{item.label}</span>
@@ -174,13 +229,12 @@ export function SiteFooter() {
           {/* Resources */}
           <div className="space-y-6">
             <h3 className="text-lg font-semibold text-white flex items-center">
-              <Shield className="h-5 w-5 mr-2 text-purple-400" />
+              <Shield className="h-5 w-5 mr-2 text-orange-400" />
               Resources
             </h3>
             <nav className="space-y-3" aria-label="Tools and resources">
               {[
                 { href: "/stock-brokers-comparison", label: "Broker Comparison" },
-                { href: "/compare-brokers", label: "Broker Reviews" },
                 { href: "/book-recommendations", label: "Investment Books" },
                 { href: "/blog", label: "Market Blog" },
                 { href: "/about", label: "About Us" },
@@ -189,7 +243,7 @@ export function SiteFooter() {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="group flex items-center text-sm text-gray-400 hover:text-purple-400 transition-all duration-200"
+                  className="group flex items-center text-sm text-gray-400 hover:text-orange-400 transition-all duration-200"
                 >
                   <MoreHorizontal className="h-3 w-3 mr-2 opacity-0 group-hover:opacity-100 transform -translate-x-2 group-hover:translate-x-0 transition-all duration-200" />
                   <span className="group-hover:translate-x-1 transition-transform duration-200">{item.label}</span>
@@ -233,10 +287,10 @@ export function SiteFooter() {
               <h3 className="text-lg font-semibold text-white mb-4">Follow Our Journey</h3>
               <div className="flex justify-center lg:justify-start space-x-4">
                 {[
-                  { href: "https://linkedin.com/company/ipotracker", icon: Linkedin, color: "hover:bg-blue-600/20 hover:text-blue-400" },
-                  { href: "https://twitter.com/ipotracker", icon: Twitter, color: "hover:bg-blue-400/20 hover:text-blue-300" },
-                  { href: "https://instagram.com/ipotracker", icon: Instagram, color: "hover:bg-pink-600/20 hover:text-pink-400" },
-                  { href: "https://youtube.com/@ipotracker", icon: Youtube, color: "hover:bg-red-600/20 hover:text-red-400" },
+                  { href: siteConfig.social.linkedin, icon: Linkedin, color: "hover:bg-blue-600/20 hover:text-blue-400" },
+                  { href: siteConfig.social.twitter, icon: Twitter, color: "hover:bg-blue-400/20 hover:text-blue-300" },
+                  { href: siteConfig.social.instagram, icon: Instagram, color: "hover:bg-pink-600/20 hover:text-pink-400" },
+                  { href: siteConfig.social.youtube, icon: Youtube, color: "hover:bg-red-600/20 hover:text-red-400" },
                 ].map((social) => (
                   <a
                     key={social.href}
@@ -280,7 +334,7 @@ export function SiteFooter() {
               ))}
             </div>
             <div className="text-center lg:text-right">
-              <p className="text-sm text-gray-400">© {new Date().getFullYear()} IPOTracker. All rights reserved.</p>
+              <p className="text-sm text-gray-400">© {new Date().getFullYear()} {siteConfig.siteName}. All rights reserved.</p>
               <p className="text-xs text-gray-500 mt-1 flex items-center justify-center lg:justify-end">
                 Made with <span className="text-red-400 mx-1">❤</span> for Indian Investors
               </p>

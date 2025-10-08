@@ -1,9 +1,10 @@
 import type { Metadata } from "next"
+import { siteConfig } from "@/config/config"
 
 export const metadata: Metadata = {
-  title: "Disclaimer | IPOTracker",
+  title: `Disclaimer | ${siteConfig.siteName}`,
   description:
-    "Important disclaimers regarding the information provided on IPOTracker. Understand the limitations of our financial data and investment information.",
+    `Important disclaimers regarding the information provided on ${siteConfig.siteName}. Understand the limitations of our financial data and investment information.`,
 }
 
 export default function DisclaimerPage() {
@@ -70,16 +71,16 @@ export default function DisclaimerPage() {
           <section id="information-disclaimer">
             <h2 className="text-2xl font-bold mb-4">1. Information Disclaimer</h2>
             <p>
-              The information contained on the IPOTracker website (the "Service") is for general information purposes
-              only. IPOTracker assumes no responsibility for errors or omissions in the contents of the Service.
+              The information contained on the {siteConfig.siteName} website (the "Service") is for general information purposes
+              only. {siteConfig.siteName} assumes no responsibility for errors or omissions in the contents of the Service.
             </p>
             <p className="mt-4">
-              In no event shall IPOTracker be liable for any special, direct, indirect, consequential, or incidental
+              In no event shall {siteConfig.siteName} be liable for any special, direct, indirect, consequential, or incidental
               damages or any damages whatsoever, whether in an action of contract, negligence or other tort, arising out
               of or in connection with the use of the Service or the contents of the Service.
             </p>
             <p className="mt-4">
-              IPOTracker reserves the right to make additions, deletions, or modifications to the contents on the
+              {siteConfig.siteName} reserves the right to make additions, deletions, or modifications to the contents on the
               Service at any time without prior notice.
             </p>
           </section>
@@ -87,7 +88,7 @@ export default function DisclaimerPage() {
           <section id="investment-disclaimer" className="mt-8">
             <h2 className="text-2xl font-bold mb-4">2. Investment Disclaimer</h2>
             <p>
-              The content on IPOTracker is provided for informational purposes only and is not intended to be investment
+              The content on {siteConfig.siteName} is provided for informational purposes only and is not intended to be investment
               advice, nor does it constitute an offer to sell or the solicitation of an offer to buy any security or
               investment product.
             </p>
@@ -105,10 +106,10 @@ export default function DisclaimerPage() {
             <div className="bg-red-50 border-l-4 border-red-400 p-4 mt-4">
               <p className="font-semibold">Grey Market Premium (GMP) Disclaimer:</p>
               <p>
-                IPOTracker does not provide any form of investment tips, recommendations, or personalized advice. All
+                {siteConfig.siteName} does not provide any form of investment tips, recommendations, or personalized advice. All
                 investment decisions, including any profits or losses incurred, are solely your responsibility. We
                 display Grey Market Premium (GMP) figures based on data available from public sources. Relying on GMP
-                information or making investment decisions based on GMP is entirely your choice, and IPOTracker shall
+                information or making investment decisions based on GMP is entirely your choice, and {siteConfig.siteName} shall
                 not be held liable under any circumstances for any financial outcomes resulting from such actions.
               </p>
             </div>
@@ -127,14 +128,14 @@ export default function DisclaimerPage() {
           <section id="third-party-content" className="mt-8">
             <h2 className="text-2xl font-bold mb-4">3. Third-Party Content</h2>
             <p>
-              IPOTracker may include content provided by third parties, including materials provided by other users,
+              {siteConfig.siteName} may include content provided by third parties, including materials provided by other users,
               bloggers, and third-party licensors, syndicators, aggregators, and/or reporting services. All statements
               and/or opinions expressed in these materials, and all articles and responses to questions and other
-              content, other than the content provided by IPOTracker, are solely the opinions and the responsibility of
+              content, other than the content provided by {siteConfig.siteName}, are solely the opinions and the responsibility of
               the person or entity providing those materials.
             </p>
             <p className="mt-4">
-              These materials do not necessarily reflect the opinion of IPOTracker. We are not responsible, or liable to
+              These materials do not necessarily reflect the opinion of {siteConfig.siteName}. We are not responsible, or liable to
               you or any third party, for the content or accuracy of any materials provided by any third parties.
             </p>
           </section>
@@ -142,27 +143,27 @@ export default function DisclaimerPage() {
           <section id="forward-looking" className="mt-8">
             <h2 className="text-2xl font-bold mb-4">4. Forward-Looking Statements</h2>
             <p>
-              The Service may contain certain forward-looking statements and information relating to IPOTracker that are
-              based on the beliefs of IPOTracker as well as assumptions made by and information currently available to
-              IPOTracker.
+              The Service may contain certain forward-looking statements and information relating to {siteConfig.siteName} that are
+              based on the beliefs of {siteConfig.siteName} as well as assumptions made by and information currently available to
+              {siteConfig.siteName}.
             </p>
             <p className="mt-4">
               These forward-looking statements are, by their nature, subject to significant risks and uncertainties.
               These forward-looking statements include, without limitation, statements relating to the company's
               business prospects, future developments, trends and conditions in the industry and geographical markets in
-              which IPOTracker operates.
+              which {siteConfig.siteName} operates.
             </p>
             <p className="mt-4">
               When used in this Service, the words "anticipate", "believe", "could", "estimate", "expect", "going
               forward", "intend", "may", "ought to", "plan", "project", "seek", "should", "will", "would" and similar
-              expressions, as they relate to IPOTracker, are intended to identify forward-looking statements.
+              expressions, as they relate to {siteConfig.siteName}, are intended to identify forward-looking statements.
             </p>
           </section>
 
           <section id="accuracy" className="mt-8">
             <h2 className="text-2xl font-bold mb-4">5. Accuracy and Completeness</h2>
             <p>
-              While we strive to provide accurate and up-to-date information, IPOTracker makes no representations or
+              While we strive to provide accurate and up-to-date information, {siteConfig.siteName} makes no representations or
               warranties of any kind, express or implied, about the completeness, accuracy, reliability, suitability or
               availability with respect to the Service or the information, products, services, or related graphics
               contained on the Service for any purpose.
@@ -179,7 +180,7 @@ export default function DisclaimerPage() {
             <h2 className="text-2xl font-bold mb-4">6. External Links</h2>
             <p>
               The Service may contain links to external websites that are not provided or maintained by or in any way
-              affiliated with IPOTracker. Please note that IPOTracker does not guarantee the accuracy, relevance,
+              affiliated with {siteConfig.siteName}. Please note that {siteConfig.siteName} does not guarantee the accuracy, relevance,
               timeliness, or completeness of any information on these external websites.
             </p>
             <p className="mt-4">
@@ -201,7 +202,7 @@ export default function DisclaimerPage() {
             </p>
             <div className="bg-blue-50 border-l-4 border-blue-400 p-4 mt-4">
               <p>
-                IPOTracker does not provide tax, accounting, legal, investment, or financial advice. The content
+                {siteConfig.siteName} does not provide tax, accounting, legal, investment, or financial advice. The content
                 available on the Service has been prepared without taking into account your financial situation,
                 investment objectives, or particular needs.
               </p>
@@ -211,7 +212,7 @@ export default function DisclaimerPage() {
           <section id="changes" className="mt-8">
             <h2 className="text-2xl font-bold mb-4">8. Changes to Disclaimer</h2>
             <p>
-              IPOTracker may revise this disclaimer from time to time. The revised disclaimer will be effective as of
+              {siteConfig.siteName} may revise this disclaimer from time to time. The revised disclaimer will be effective as of
               the published update date.
             </p>
             <p className="mt-4">
@@ -225,7 +226,7 @@ export default function DisclaimerPage() {
             <p>If you have any questions about this Disclaimer, please contact us at:</p>
             <div className="mt-4 bg-gray-50 p-6 rounded-lg">
               <p>
-                <strong>IPOTracker</strong>
+                <strong>{siteConfig.siteName}</strong>
               </p>
               <p>
                 Email:{" "}

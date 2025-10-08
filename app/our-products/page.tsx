@@ -16,9 +16,10 @@ import {
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { siteConfig } from "@/config/config"
 
 export const metadata: Metadata = {
-  title: "Our Products - CardRecommend & ReadRecommend | IPOTracker",
+  title: `Our Products - CardRecommend & ReadRecommend | ${siteConfig.siteName}`,
   description:
     "Discover our suite of products: CardRecommend for smart credit card recommendations and ReadRecommend for curated book suggestions. Empowering your financial and personal growth journey.",
   keywords: "CardRecommend, ReadRecommend, credit cards, book recommendations, financial products, reading suggestions",

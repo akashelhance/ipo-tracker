@@ -1,11 +1,12 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { TrendingUp, BarChart2, Award, Users, BookOpen, Shield, Gift, Calculator } from "lucide-react"
+import { siteConfig } from "@/config/config"
 
 export const metadata: Metadata = {
-  title: "Sitemap | IPOTracker",
+  title: `Sitemap | ${siteConfig.siteName}`,
   description:
-    "Navigate through all sections and pages of IPOTracker. Find information about IPOs, buybacks, subscription status, calculators, and more.",
+    `Navigate through all sections and pages of ${siteConfig.siteName}. Find information about IPOs, buybacks, subscription status, calculators, and more.`,
 }
 
 export default function SitemapPage() {
@@ -15,7 +16,7 @@ export default function SitemapPage() {
         <div className="mb-10 text-center">
           <h1 className="text-3xl md:text-4xl font-bold mb-4">Sitemap</h1>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Find your way around IPOTracker with our comprehensive sitemap. Explore all sections and pages to access the
+            Find your way around {siteConfig.siteName} with our comprehensive sitemap. Explore all sections and pages to access the
             information you need.
           </p>
         </div>

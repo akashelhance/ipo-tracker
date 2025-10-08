@@ -4,16 +4,16 @@ import { Inter } from "next/font/google"
 import "./globals.css"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
+import { siteConfig } from "@/config/config"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: {
-    default: "IPOTracker - IPO Calendar, GMP, Buybacks & Stock Market Analysis",
-    template: "%s | IPOTracker",
+    default: `${siteConfig.siteName} - IPO Calendar, GMP, Buybacks & Stock Market Analysis`,
+    template: `%s | ${siteConfig.siteName}`,
   },
-  description:
-    "Get comprehensive IPO information, Grey Market Premium (GMP) data, share buyback offers, subscription status, and expert stock market analysis. Your trusted source for Indian stock market insights.",
+  description: siteConfig.siteDescription,
   keywords: [
     "IPO",
     "Initial Public Offering",
@@ -27,41 +27,40 @@ export const metadata: Metadata = {
     "Investment",
     "Stock Analysis",
     "Market Research",
+    ...siteConfig.metadata.keywords,
   ],
-  authors: [{ name: "IPOTracker Team" }],
-  creator: "IPOTracker",
-  publisher: "IPOTracker",
+  authors: [{ name: siteConfig.metadata.author }],
+  creator: siteConfig.siteName,
+  publisher: siteConfig.siteName,
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("https://ipotracker.com"),
+  metadataBase: new URL(siteConfig.siteUrl),
   alternates: {
     canonical: "/",
   },
   openGraph: {
     type: "website",
-    locale: "en_IN",
-    url: "https://ipotracker.com",
-    title: "IPOTracker - IPO Calendar, GMP, Buybacks & Stock Market Analysis",
-    description:
-      "Get comprehensive IPO information, Grey Market Premium (GMP) data, share buyback offers, subscription status, and expert stock market analysis.",
-    siteName: "IPOTracker",
+    locale: siteConfig.metadata.language,
+    url: siteConfig.siteUrl,
+    title: `${siteConfig.siteName} - IPO Calendar, GMP, Buybacks & Stock Market Analysis`,
+    description: siteConfig.siteDescription,
+    siteName: siteConfig.siteName,
     images: [
       {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "IPOTracker - Your trusted source for IPO and stock market data",
+        alt: `${siteConfig.siteName} - Your trusted source for IPO and stock market data`,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "IPOTracker - IPO Calendar, GMP, Buybacks & Stock Market Analysis",
-    description:
-      "Get comprehensive IPO information, Grey Market Premium (GMP) data, share buyback offers, subscription status, and expert stock market analysis.",
+    title: `${siteConfig.siteName} - IPO Calendar, GMP, Buybacks & Stock Market Analysis`,
+    description: siteConfig.siteDescription,
     images: ["/og-image.jpg"],
     creator: "@ipotracker",
   },

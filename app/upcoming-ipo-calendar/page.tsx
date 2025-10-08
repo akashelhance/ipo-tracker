@@ -117,9 +117,9 @@ function formatPriceBand(low: number, high: number): string {
 export default async function IPOCalendarPage({ searchParams }: PageProps) {
   const search = searchParams?.search || ""
 
-  // Fetch IPO data server-side with no cache (fresh every request)
+  // Fetch IPO data server-side with ISR (revalidates every 5 minutes)
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ipos/light`, {
-    cache: "no-store",
+    next: { revalidate: 300 }, // Cache for 5 minutes
   })
 
   if (!res.ok) {

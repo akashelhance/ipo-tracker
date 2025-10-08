@@ -1,7 +1,8 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Menu, Search, ChevronDown, X, TrendingUp, Calendar, Users, FileText } from "lucide-react"
+import { Menu, Search, ChevronDown, X, TrendingUp, Calendar, Users, FileText, Briefcase, DollarSign, Fuel, Building2, Landmark } from "lucide-react"
+import { siteConfig } from "@/config/config"
 
 export function SiteHeader() {
   return (
@@ -40,9 +41,9 @@ export function SiteHeader() {
               </div>
               <div className="flex flex-col">
                 <span className="font-bold text-xl text-gray-900 group-hover:text-blue-600 transition-colors">
-                  IPOTracker
+                  {siteConfig.siteName}
                 </span>
-                <span className="text-xs text-gray-500 hidden sm:block">Your IPO Investment Guide</span>
+                <span className="text-xs text-gray-500 hidden sm:block">{siteConfig.siteTagline}</span>
               </div>
             </Link>
 
@@ -156,12 +157,106 @@ export function SiteHeader() {
                 </div>
               </div>
 
-              <Link
-                href="/share-buyback-offers"
-                className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-all duration-200"
-              >
-                Buybacks
-              </Link>
+              {/* Investment Options Dropdown */}
+              <div className="relative group">
+                <button className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-all duration-200">
+                  Investments
+                  <ChevronDown className="ml-1 h-4 w-4 group-hover:rotate-180 transition-transform duration-200" />
+                </button>
+                <div className="absolute top-full left-0 mt-1 w-56 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                  <div className="py-2">
+                    <Link
+                      href="/ncds"
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                    >
+                      <Briefcase className="mr-3 h-4 w-4" />
+                      NCDs
+                    </Link>
+                    <Link
+                      href="/rights-issues"
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                    >
+                      <TrendingUp className="mr-3 h-4 w-4" />
+                      Rights Issues
+                    </Link>
+                    <Link
+                      href="/share-buyback-offers"
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                    >
+                      <DollarSign className="mr-3 h-4 w-4" />
+                      Buyback Offers
+                    </Link>
+                    <Link
+                      href="/bank-fd-rates"
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                    >
+                      <Building2 className="mr-3 h-4 w-4" />
+                      Bank FD Rates
+                    </Link>
+                    <Link
+                      href="/bank-rd-rates"
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                    >
+                      <Landmark className="mr-3 h-4 w-4" />
+                      Bank RD Rates
+                    </Link>
+                  </div>
+                </div>
+              </div>
+
+              {/* Rates & Prices Dropdown */}
+              <div className="relative group">
+                <button className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-all duration-200">
+                  Rates
+                  <ChevronDown className="ml-1 h-4 w-4 group-hover:rotate-180 transition-transform duration-200" />
+                </button>
+                <div className="absolute top-full left-0 mt-1 w-56 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                  <div className="py-2">
+                    <Link
+                      href="/gold-rates"
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                    >
+                      <TrendingUp className="mr-3 h-4 w-4" />
+                      Gold Rates
+                    </Link>
+                    <Link
+                      href="/silver-rates"
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                    >
+                      <TrendingUp className="mr-3 h-4 w-4" />
+                      Silver Rates
+                    </Link>
+                    <Link
+                      href="/petrol-rates"
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                    >
+                      <Fuel className="mr-3 h-4 w-4" />
+                      Petrol Rates
+                    </Link>
+                    <Link
+                      href="/diesel-rates"
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                    >
+                      <Fuel className="mr-3 h-4 w-4" />
+                      Diesel Rates
+                    </Link>
+                    <Link
+                      href="/cng-rates"
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                    >
+                      <Fuel className="mr-3 h-4 w-4" />
+                      CNG Rates
+                    </Link>
+                    <Link
+                      href="/lpg-rates"
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                    >
+                      <Fuel className="mr-3 h-4 w-4" />
+                      LPG Rates
+                    </Link>
+                  </div>
+                </div>
+              </div>
 
               <Link
                 href="/stock-brokers-comparison"
@@ -361,16 +456,140 @@ export function SiteHeader() {
               </div>
             </div>
 
-            {/* Direct Links - Auto close menu */}
-            <label htmlFor="mobile-menu-toggle" className="block">
-              <Link
-                href="/share-buyback-offers"
-                className="flex items-center px-4 py-3 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+            {/* Mobile Investment Options Section with Accordion */}
+            <div className="px-4 py-2">
+              <input type="checkbox" id="mobile-investments-toggle" className="hidden peer" />
+              <label
+                htmlFor="mobile-investments-toggle"
+                className="flex items-center justify-between w-full py-2 text-sm font-semibold text-gray-800 cursor-pointer hover:text-blue-600 bg-gray-50 hover:bg-blue-50 px-3 rounded-lg transition-all duration-200"
               >
-                Buybacks
-              </Link>
-            </label>
+                <span className="flex items-center">
+                  <Briefcase className="mr-3 h-5 w-5 text-blue-600" />
+                  Investment Options
+                </span>
+                <ChevronDown className="h-5 w-5 text-blue-600 transition-transform peer-checked:rotate-180" />
+              </label>
+              <div className="hidden peer-checked:block ml-4 mt-2 space-y-1">
+                <label htmlFor="mobile-menu-toggle" className="block">
+                  <Link
+                    href="/ncds"
+                    className="flex items-center py-2 text-sm text-gray-700 hover:text-blue-600"
+                  >
+                    <Briefcase className="mr-3 h-4 w-4" />
+                    NCDs
+                  </Link>
+                </label>
+                <label htmlFor="mobile-menu-toggle" className="block">
+                  <Link
+                    href="/rights-issues"
+                    className="flex items-center py-2 text-sm text-gray-700 hover:text-blue-600"
+                  >
+                    <TrendingUp className="mr-3 h-4 w-4" />
+                    Rights Issues
+                  </Link>
+                </label>
+                <label htmlFor="mobile-menu-toggle" className="block">
+                  <Link
+                    href="/share-buyback-offers"
+                    className="flex items-center py-2 text-sm text-gray-700 hover:text-blue-600"
+                  >
+                    <DollarSign className="mr-3 h-4 w-4" />
+                    Buyback Offers
+                  </Link>
+                </label>
+                <label htmlFor="mobile-menu-toggle" className="block">
+                  <Link
+                    href="/bank-fd-rates"
+                    className="flex items-center py-2 text-sm text-gray-700 hover:text-blue-600"
+                  >
+                    <Building2 className="mr-3 h-4 w-4" />
+                    Bank FD Rates
+                  </Link>
+                </label>
+                <label htmlFor="mobile-menu-toggle" className="block">
+                  <Link
+                    href="/bank-rd-rates"
+                    className="flex items-center py-2 text-sm text-gray-700 hover:text-blue-600"
+                  >
+                    <Landmark className="mr-3 h-4 w-4" />
+                    Bank RD Rates
+                  </Link>
+                </label>
+              </div>
+            </div>
 
+            {/* Mobile Rates & Prices Section with Accordion */}
+            <div className="px-4 py-2">
+              <input type="checkbox" id="mobile-rates-toggle" className="hidden peer" />
+              <label
+                htmlFor="mobile-rates-toggle"
+                className="flex items-center justify-between w-full py-2 text-sm font-semibold text-gray-800 cursor-pointer hover:text-blue-600 bg-gray-50 hover:bg-blue-50 px-3 rounded-lg transition-all duration-200"
+              >
+                <span className="flex items-center">
+                  <TrendingUp className="mr-3 h-5 w-5 text-blue-600" />
+                  Rates & Prices
+                </span>
+                <ChevronDown className="h-5 w-5 text-blue-600 transition-transform peer-checked:rotate-180" />
+              </label>
+              <div className="hidden peer-checked:block ml-4 mt-2 space-y-1">
+                <label htmlFor="mobile-menu-toggle" className="block">
+                  <Link
+                    href="/gold-rates"
+                    className="flex items-center py-2 text-sm text-gray-700 hover:text-blue-600"
+                  >
+                    <TrendingUp className="mr-3 h-4 w-4" />
+                    Gold Rates
+                  </Link>
+                </label>
+                <label htmlFor="mobile-menu-toggle" className="block">
+                  <Link
+                    href="/silver-rates"
+                    className="flex items-center py-2 text-sm text-gray-700 hover:text-blue-600"
+                  >
+                    <TrendingUp className="mr-3 h-4 w-4" />
+                    Silver Rates
+                  </Link>
+                </label>
+                <label htmlFor="mobile-menu-toggle" className="block">
+                  <Link
+                    href="/petrol-rates"
+                    className="flex items-center py-2 text-sm text-gray-700 hover:text-blue-600"
+                  >
+                    <Fuel className="mr-3 h-4 w-4" />
+                    Petrol Rates
+                  </Link>
+                </label>
+                <label htmlFor="mobile-menu-toggle" className="block">
+                  <Link
+                    href="/diesel-rates"
+                    className="flex items-center py-2 text-sm text-gray-700 hover:text-blue-600"
+                  >
+                    <Fuel className="mr-3 h-4 w-4" />
+                    Diesel Rates
+                  </Link>
+                </label>
+                <label htmlFor="mobile-menu-toggle" className="block">
+                  <Link
+                    href="/cng-rates"
+                    className="flex items-center py-2 text-sm text-gray-700 hover:text-blue-600"
+                  >
+                    <Fuel className="mr-3 h-4 w-4" />
+                    CNG Rates
+                  </Link>
+                </label>
+                <label htmlFor="mobile-menu-toggle" className="block">
+                  <Link
+                    href="/lpg-rates"
+                    className="flex items-center py-2 text-sm text-gray-700 hover:text-blue-600"
+                  >
+                    <Fuel className="mr-3 h-4 w-4" />
+                    LPG Rates
+                  </Link>
+                </label>
+              </div>
+            </div>
+
+            {/* Direct Links - Auto close menu */}
             <label htmlFor="mobile-menu-toggle" className="block">
               <Link
                 href="/stock-brokers-comparison"
