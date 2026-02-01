@@ -12,6 +12,8 @@ import {
   Trophy,
   DollarSign,
   Receipt,
+  Home,
+  ChevronRight,
 } from "lucide-react"
 
 export const metadata: Metadata = {
@@ -126,6 +128,15 @@ export default function CalculatorsPage() {
       <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 text-white">
         <div className="container mx-auto px-4 py-16">
           <div className="text-center max-w-4xl mx-auto">
+            {/* Breadcrumb */}
+            <nav className="flex items-center justify-center text-sm text-blue-100 mb-8">
+              <Link href="/" className="hover:text-white flex items-center gap-1 transition-colors">
+                <Home className="h-3 w-3" /> Home
+              </Link>
+              <ChevronRight className="h-4 w-4 mx-2 text-blue-200" />
+              <span className="text-white font-medium">Calculators</span>
+            </nav>
+
             <div className="flex justify-center mb-6">
               <div className="p-4 bg-white/10 rounded-full backdrop-blur-sm">
                 <Calculator className="h-12 w-12" />

@@ -1,10 +1,15 @@
+"use client"
+
 import Link from "next/link"
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Menu, Search, ChevronDown, X, TrendingUp, Calendar, Users, FileText, Briefcase, DollarSign, Fuel, Building2, Landmark } from "lucide-react"
-import { siteConfig } from "@/config/config"
+import { Menu, Search, ChevronDown, X, TrendingUp, Calendar, Users, FileText, Briefcase, DollarSign, Fuel, Building2, Landmark, Book } from "lucide-react"
+import gmpprovider from "@/config/gmpprovider"
+import { LeadsCaptureModal } from "@/components/leads-capture-modal"
 
 export function SiteHeader() {
+  const [isAlertModalOpen, setIsAlertModalOpen] = useState(false)
   return (
     <>
       {/* Promotional Banner */}
@@ -20,6 +25,7 @@ export function SiteHeader() {
               size="sm"
               variant="secondary"
               className="bg-white text-blue-600 hover:bg-gray-100 h-7 px-3 text-xs font-medium"
+              onClick={() => setIsAlertModalOpen(true)}
             >
               Subscribe Now
             </Button>
@@ -30,7 +36,7 @@ export function SiteHeader() {
         </div>
       </div>
 
-      {/* Main Header */}
+      {/* Main header */}
       <header className="sticky top-0 z-40 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80 shadow-sm">
         <div className="container mx-auto px-4">
           <div className="flex h-16 items-center justify-between">
@@ -41,9 +47,9 @@ export function SiteHeader() {
               </div>
               <div className="flex flex-col">
                 <span className="font-bold text-xl text-gray-900 group-hover:text-blue-600 transition-colors">
-                  {siteConfig.siteName}
+                  {gmpprovider.websiteName}
                 </span>
-                <span className="text-xs text-gray-500 hidden sm:block">{siteConfig.siteTagline}</span>
+                <span className="text-xs text-gray-500 hidden sm:block">{gmpprovider.tagName}</span>
               </div>
             </Link>
 
@@ -258,20 +264,45 @@ export function SiteHeader() {
                 </div>
               </div>
 
-              <Link
-                href="/stock-brokers-comparison"
-                className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-all duration-200"
-              >
-                Brokers
-              </Link>
-
-              <Link
-                href="/blog"
-                className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-all duration-200"
-              >
-                <FileText className="mr-1 h-4 w-4" />
-                Blog
-              </Link>
+              {/* Resources Dropdown */}
+              <div className="relative group">
+                <button className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-all duration-200">
+                  Resources
+                  <ChevronDown className="ml-1 h-4 w-4 group-hover:rotate-180 transition-transform duration-200" />
+                </button>
+                <div className="absolute top-full left-0 mt-1 w-56 bg-white rounded-lg shadow-lg border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                  <div className="py-2">
+                    <Link
+                      href="/stock-brokers-comparison"
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                    >
+                      <Users className="mr-3 h-4 w-4" />
+                      Brokers Comparison
+                    </Link>
+                    <Link
+                      href="/blog"
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                    >
+                      <FileText className="mr-3 h-4 w-4" />
+                      Market Blog
+                    </Link>
+                    <Link
+                      href="/market-holidays"
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                    >
+                      <Calendar className="mr-3 h-4 w-4" />
+                      Market Holidays
+                    </Link>
+                    <Link
+                      href="/glossary"
+                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                    >
+                      <Book className="mr-3 h-4 w-4" />
+                      Glossary
+                    </Link>
+                  </div>
+                </div>
+              </div>
             </nav>
 
             {/* Search Bar */}
@@ -284,7 +315,10 @@ export function SiteHeader() {
                   className="pl-10 pr-4 py-2 w-64 text-sm border-gray-200 focus:border-blue-500 focus:ring-blue-500"
                 />
               </div>
-              <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-md hover:shadow-lg transition-all duration-200">
+              <Button
+                onClick={() => setIsAlertModalOpen(true)}
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-md hover:shadow-lg transition-all duration-200"
+              >
                 Get Alerts
               </Button>
             </div>
@@ -589,29 +623,65 @@ export function SiteHeader() {
               </div>
             </div>
 
-            {/* Direct Links - Auto close menu */}
-            <label htmlFor="mobile-menu-toggle" className="block">
-              <Link
-                href="/stock-brokers-comparison"
-                className="flex items-center px-4 py-3 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
+            {/* Mobile Resources Section with Accordion */}
+            <div className="px-4 py-2">
+              <input type="checkbox" id="mobile-resources-toggle" className="hidden peer" />
+              <label
+                htmlFor="mobile-resources-toggle"
+                className="flex items-center justify-between w-full py-2 text-sm font-semibold text-gray-800 cursor-pointer hover:text-blue-600 bg-gray-50 hover:bg-blue-50 px-3 rounded-lg transition-all duration-200"
               >
-                Brokers
-              </Link>
-            </label>
-
-            <label htmlFor="mobile-menu-toggle" className="block">
-              <Link
-                href="/blog"
-                className="flex items-center px-4 py-3 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
-              >
-                <FileText className="mr-3 h-4 w-4" />
-                Blog
-              </Link>
-            </label>
+                <span className="flex items-center">
+                  <Book className="mr-3 h-5 w-5 text-blue-600" />
+                  Resources
+                </span>
+                <ChevronDown className="h-5 w-5 text-blue-600 transition-transform peer-checked:rotate-180" />
+              </label>
+              <div className="hidden peer-checked:block ml-4 mt-2 space-y-1">
+                <label htmlFor="mobile-menu-toggle" className="block">
+                  <Link
+                    href="/stock-brokers-comparison"
+                    className="flex items-center py-2 text-sm text-gray-700 hover:text-blue-600"
+                  >
+                    <Users className="mr-3 h-4 w-4" />
+                    Brokers Comparison
+                  </Link>
+                </label>
+                <label htmlFor="mobile-menu-toggle" className="block">
+                  <Link
+                    href="/blog"
+                    className="flex items-center py-2 text-sm text-gray-700 hover:text-blue-600"
+                  >
+                    <FileText className="mr-3 h-4 w-4" />
+                    Market Blog
+                  </Link>
+                </label>
+                <label htmlFor="mobile-menu-toggle" className="block">
+                  <Link
+                    href="/market-holidays"
+                    className="flex items-center py-2 text-sm text-gray-700 hover:text-blue-600"
+                  >
+                    <Calendar className="mr-3 h-4 w-4" />
+                    Market Holidays
+                  </Link>
+                </label>
+                <label htmlFor="mobile-menu-toggle" className="block">
+                  <Link
+                    href="/glossary"
+                    className="flex items-center py-2 text-sm text-gray-700 hover:text-blue-600"
+                  >
+                    <Book className="mr-3 h-4 w-4" />
+                    Glossary
+                  </Link>
+                </label>
+              </div>
+            </div>
 
             {/* Mobile CTA */}
             <div className="px-4 pt-4 border-t">
-              <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white">
+              <Button
+                onClick={() => setIsAlertModalOpen(true)}
+                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+              >
                 Get Free IPO Alerts
               </Button>
             </div>
@@ -629,6 +699,7 @@ export function SiteHeader() {
           </div>
         </div>
       </header>
+      <LeadsCaptureModal isOpen={isAlertModalOpen} onClose={() => setIsAlertModalOpen(false)} />
     </>
   )
 }

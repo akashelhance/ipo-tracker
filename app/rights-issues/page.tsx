@@ -33,7 +33,7 @@ interface RightsIssue {
 }
 
 interface PageProps {
-  searchParams: { search?: string }
+  searchParams: Promise<{ search?: string }>
 }
 
 // Revalidate every 30 minutes for rights issue updates
@@ -151,7 +151,7 @@ async function fetchRightsIssues(): Promise<RightsIssue[]> {
 }
 
 export default async function RightsIssuesPage({ searchParams }: PageProps) {
-  const search = searchParams?.search || ""
+  const { search = "" } = await searchParams
 
   const rightsIssues = await fetchRightsIssues()
 
@@ -348,22 +348,22 @@ export default async function RightsIssuesPage({ searchParams }: PageProps) {
                         key={issue.id}
                         className="hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 transition-all duration-300 group"
                       >
-                      <td className="px-6 py-6">
-                        <div className="flex items-center">
-                          <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center text-white font-bold text-lg">
-                            {issue.companyName.charAt(0)}
+                        <td className="px-6 py-6">
+                          <div className="flex items-center">
+                            <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center text-white font-bold text-lg">
+                              {issue.companyName.charAt(0)}
+                            </div>
+                            <div className="ml-4">
+                              <Link
+                                href={`/rights-issues/${issue.slug}`}
+                                className="text-lg font-semibold text-gray-900 hover:text-purple-600 transition-colors group-hover:text-purple-700"
+                              >
+                                {issue.companyName}
+                                <ArrowRight className="inline h-4 w-4 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" />
+                              </Link>
+                            </div>
                           </div>
-                          <div className="ml-4">
-                            <Link
-                              href={`/rights-issues/${issue.slug}`}
-                              className="text-lg font-semibold text-gray-900 hover:text-purple-600 transition-colors group-hover:text-purple-700"
-                            >
-                              {issue.companyName}
-                              <ArrowRight className="inline h-4 w-4 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" />
-                            </Link>
-                          </div>
-                        </div>
-                      </td>
+                        </td>
                         <td className="px-6 py-6">
                           <div className="text-lg font-bold text-gray-900">{issue.issueSize}</div>
                         </td>

@@ -2,15 +2,12 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { CTAButton } from "@/components/cta-button"
 import {
-  TrendingUp,
-  Calendar,
   Building2,
   Star,
   ArrowRight,
   Info,
   Target,
   DollarSign,
-  Award,
   Percent,
   Repeat,
 } from "lucide-react"

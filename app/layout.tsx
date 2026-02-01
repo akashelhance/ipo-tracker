@@ -5,13 +5,14 @@ import "./globals.css"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { siteConfig } from "@/config/config"
+import gmpprovider from "@/config/gmpprovider"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: {
-    default: `${siteConfig.siteName} - IPO Calendar, GMP, Buybacks & Stock Market Analysis`,
-    template: `%s | ${siteConfig.siteName}`,
+    default: `${gmpprovider.websiteName} - ${gmpprovider.tagName}`,
+    template: `%s | ${gmpprovider.websiteName}`,
   },
   description: siteConfig.siteDescription,
   keywords: [

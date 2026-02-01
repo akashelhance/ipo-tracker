@@ -8,7 +8,6 @@ import {
   Fuel,
   Info,
   Target,
-  DollarSign,
   Gauge,
 } from "lucide-react"
 import OtherInvestmentOptionWithDemat from "@/components/OtherInvestmentOptionWithDemat"

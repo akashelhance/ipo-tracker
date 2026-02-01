@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { Wallet, ArrowLeft } from "lucide-react"
+import { Wallet, Home, ChevronRight } from "lucide-react"
 import { NPSCalculatorForm } from "@/components/nps-calculator-form"
 
 export const metadata: Metadata = {
@@ -57,13 +57,15 @@ export default function NPSCalculatorPage() {
         {/* Header */}
         <div className="bg-gradient-to-r from-rose-600 to-pink-600 text-white">
           <div className="container mx-auto px-4 py-8">
-            <Link
-              href="/calculators"
-              className="inline-flex items-center text-rose-100 hover:text-white mb-4 transition-colors"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Calculators
-            </Link>
+            <nav className="flex items-center text-sm text-rose-100 mb-8">
+              <Link href="/" className="hover:text-white flex items-center gap-1 transition-colors">
+                <Home className="h-3 w-3" /> Home
+              </Link>
+              <ChevronRight className="h-4 w-4 mx-2 text-rose-200" />
+              <Link href="/calculators" className="hover:text-white transition-colors">Calculators</Link>
+              <ChevronRight className="h-4 w-4 mx-2 text-rose-200" />
+              <span className="text-white font-medium">NPS Calculator</span>
+            </nav>
 
             <div className="flex items-center gap-4">
               <div className="p-3 bg-white/10 rounded-xl backdrop-blur-sm">

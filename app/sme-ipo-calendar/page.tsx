@@ -14,9 +14,8 @@ import {
   Target,
   DollarSign,
   ExternalLink,
-    BarChart3,
-     Calculator,
-  ChevronDown,
+  BarChart3,
+  Calculator,
 } from "lucide-react"
 
 interface IPO {
@@ -585,7 +584,7 @@ export default async function SMEIPOCalendarPage({ searchParams }: PageProps) {
           </div>
 
           {/* Bottom Navigation */}
-             {/* Explore More Investment Tools Section */}
+          {/* Explore More Investment Tools Section */}
           <div className="mt-16">
             <div className="text-center mb-12">
               <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Explore More Investment Tools</h3>

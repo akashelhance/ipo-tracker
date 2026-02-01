@@ -1,4 +1,6 @@
 import type { Metadata } from "next"
+import Link from "next/link"
+import { Home, ChevronRight } from "lucide-react"
 import { PPFCalculatorForm } from "@/components/ppf-calculator-form"
 
 export const metadata: Metadata = {
@@ -14,6 +16,15 @@ export default function PPFCalculatorPage() {
       {/* Header */}
       <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
         <div className="container mx-auto px-4 py-12">
+          <nav className="flex items-center text-sm text-indigo-100 mb-8">
+            <Link href="/" className="hover:text-white flex items-center gap-1 transition-colors">
+              <Home className="h-3 w-3" /> Home
+            </Link>
+            <ChevronRight className="h-4 w-4 mx-2 text-indigo-200" />
+            <Link href="/calculators" className="hover:text-white transition-colors">Calculators</Link>
+            <ChevronRight className="h-4 w-4 mx-2 text-indigo-200" />
+            <span className="text-white font-medium">PPF Calculator</span>
+          </nav>
           <h1 className="text-3xl md:text-4xl font-bold mb-4">PPF Calculator</h1>
           <p className="text-xl text-indigo-100 max-w-3xl">
             Calculate your Public Provident Fund returns and plan your long-term tax-saving investments

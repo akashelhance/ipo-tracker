@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import Image from "next/image"
 import { notFound } from "next/navigation"
-import { ArrowLeft, Star, ExternalLink, Check, Calendar, Users, TrendingUp } from "lucide-react"
+import { Star, ExternalLink, Check, Calendar, Users, TrendingUp, Home, ChevronRight } from "lucide-react"
 import { brokers } from "@/lib/broker-data"
 
 interface PageProps {
@@ -47,15 +47,16 @@ export default async function BrokerDetailsPage({ params }: PageProps) {
         </div>
         <div className="relative container mx-auto px-4 py-12">
           {/* Back Navigation */}
-          <div className="mb-8">
-            <Link
-              href="/stock-brokers-comparison"
-              className="inline-flex items-center text-white/80 hover:text-white transition-colors bg-white/10 backdrop-blur-md px-4 py-2 rounded-full border border-white/20"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Broker Comparison
+          {/* Breadcrumb Navigation */}
+          <nav className="flex items-center text-sm text-blue-200 mb-8">
+            <Link href="/" className="hover:text-white flex items-center gap-1 transition-colors">
+              <Home className="h-3 w-3" /> Home
             </Link>
-          </div>
+            <ChevronRight className="h-4 w-4 mx-2 text-blue-400" />
+            <Link href="/stock-brokers-comparison" className="hover:text-white transition-colors">Stock Brokers</Link>
+            <ChevronRight className="h-4 w-4 mx-2 text-blue-400" />
+            <span className="text-white font-medium">{broker.name}</span>
+          </nav>
 
           {/* Header */}
           <div className="text-white">
@@ -74,11 +75,10 @@ export default async function BrokerDetailsPage({ params }: PageProps) {
                   <h1 className="text-4xl md:text-5xl font-bold mb-3 text-white">{broker.name}</h1>
                   <div className="flex items-center gap-3 mb-2">
                     <span
-                      className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-                        broker.type === "Discount"
+                      className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${broker.type === "Discount"
                           ? "bg-green-500/20 backdrop-blur-md text-green-100 border border-green-400/30"
                           : "bg-blue-500/20 backdrop-blur-md text-blue-100 border border-blue-400/30"
-                      }`}
+                        }`}
                     >
                       {broker.type} Broker
                     </span>

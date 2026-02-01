@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { TrendingUp, ArrowLeft, Calculator, PiggyBank, Target } from "lucide-react"
+import { TrendingUp, Calculator, PiggyBank, Target, Home, ChevronRight } from "lucide-react"
 import { SipCalculatorForm } from "@/components/sip-calculator-form"
 
 export const metadata: Metadata = {
@@ -56,13 +56,16 @@ export default function SIPCalculatorPage() {
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white">
           <div className="container mx-auto px-4 py-8">
-            <Link
-              href="/calculators"
-              className="inline-flex items-center text-blue-100 hover:text-white mb-4 transition-colors"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Calculators
-            </Link>
+            {/* Breadcrumb */}
+            <nav className="flex items-center text-sm text-blue-100 mb-8">
+              <Link href="/" className="hover:text-white flex items-center gap-1 transition-colors">
+                <Home className="h-3 w-3" /> Home
+              </Link>
+              <ChevronRight className="h-4 w-4 mx-2 text-blue-200" />
+              <Link href="/calculators" className="hover:text-white transition-colors">Calculators</Link>
+              <ChevronRight className="h-4 w-4 mx-2 text-blue-200" />
+              <span className="text-white font-medium">SIP Calculator</span>
+            </nav>
 
             <div className="flex items-center gap-4">
               <div className="p-3 bg-white/10 rounded-xl backdrop-blur-sm">

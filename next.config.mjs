@@ -3,10 +3,10 @@ const withPWA = pkg.default || pkg
 
 const nextConfig = {
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: false,
   },
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
   images: {
     unoptimized: false, // ✅ Enable Next.js image optimization

@@ -31,6 +31,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/privacy-policy",
     "/terms-of-service",
     "/disclaimer",
+    "/market-holidays",
+    "/glossary",
     "/sitemap",
   ]
 

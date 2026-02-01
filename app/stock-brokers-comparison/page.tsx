@@ -3,7 +3,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import Image from "next/image"
 import { brokers } from "@/lib/broker-data"
-import { Star, Filter, TrendingUp, Building2, Users } from "lucide-react"
+import { Star, Filter, TrendingUp, Building2, Users, Home, ChevronRight } from "lucide-react"
 
 interface PageProps {
   searchParams: Promise<{ filter?: string }>
@@ -73,17 +73,15 @@ function FilterButton({
   return (
     <Link
       href={href}
-      className={`inline-flex items-center px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 ${
-        isActive
+      className={`inline-flex items-center px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 ${isActive
           ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg"
           : "bg-white/80 backdrop-blur-sm text-gray-700 hover:bg-white border border-gray-200 hover:border-blue-300"
-      }`}
+        }`}
     >
       {children}
       <span
-        className={`ml-2 px-2 py-1 rounded-full text-xs font-bold ${
-          isActive ? "bg-white/20 text-white" : "bg-gray-100 text-gray-600"
-        }`}
+        className={`ml-2 px-2 py-1 rounded-full text-xs font-bold ${isActive ? "bg-white/20 text-white" : "bg-gray-100 text-gray-600"
+          }`}
       >
         {count}
       </span>
@@ -119,11 +117,10 @@ function BrokerCard({ broker }: { broker: (typeof brokers)[0] }) {
               </h3>
               <div className="flex items-center gap-2">
                 <span
-                  className={`px-3 py-1 rounded-full text-xs font-semibold transition-all duration-300 transform group-hover:scale-105 ${
-                    broker.type === "Discount"
+                  className={`px-3 py-1 rounded-full text-xs font-semibold transition-all duration-300 transform group-hover:scale-105 ${broker.type === "Discount"
                       ? "bg-green-100 text-green-700 group-hover:bg-green-200 group-hover:shadow-md"
                       : "bg-blue-100 text-blue-700 group-hover:bg-blue-200 group-hover:shadow-md"
-                  }`}
+                    }`}
                 >
                   {broker.type}
                 </span>
@@ -259,6 +256,13 @@ export default async function StockBrokersComparisonPage({ searchParams }: PageP
         </div>
         <div className="relative container mx-auto px-4 py-16">
           <div className="text-center text-white">
+            <nav className="flex items-center justify-center text-sm text-blue-200 mb-8">
+              <Link href="/" className="hover:text-white flex items-center gap-1 transition-colors">
+                <Home className="h-3 w-3" /> Home
+              </Link>
+              <ChevronRight className="h-4 w-4 mx-2 text-blue-400" />
+              <span className="text-white font-medium">Stock Brokers</span>
+            </nav>
             <div className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-md rounded-full text-sm font-medium mb-6 border border-white/20">
               <TrendingUp className="h-4 w-4 mr-2" />
               Compare Top Brokers

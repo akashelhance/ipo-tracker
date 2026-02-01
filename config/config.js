@@ -17,6 +17,8 @@
  * @module config
  */
 
+import gmpprovider from './gmpprovider'
+
 /**
  * Site Configuration Object
  * @typedef {Object} SiteConfig
@@ -30,24 +32,18 @@
 
 export const siteConfig = {
   // Basic Site Information
-  siteName: "IPOTracker",
+  siteName: gmpprovider.websiteName,
   siteDescription: "India's most trusted platform for IPO insights, market analysis, and investment tools. Empowering smart investment decisions since 2020.",
-  siteTagline: "Your IPO Investment Guide",
+  siteTagline: gmpprovider.tagName,
   siteUrl: "https://www.ipotracker.com",
-  
+
   // Contact Information
-  contactEmail: "info@ipotracker.com",
+  contactEmail: gmpprovider.contact.email,
   supportEmail: "support@ipotracker.com",
-  
+
   // Social Media Links
-  social: {
-    twitter: "https://twitter.com/ipotracker",
-    facebook: "https://facebook.com/ipotracker",
-    linkedin: "https://linkedin.com/company/ipotracker",
-    instagram: "https://instagram.com/ipotracker",
-    youtube: "https://youtube.com/@ipotracker",
-  },
-  
+  social: gmpprovider.socialLinks,
+
   // Company Information
   company: {
     name: "IPOTracker Private Limited",
@@ -61,7 +57,7 @@ export const siteConfig = {
     phone: "+91 22 1234 5678",
     registrationNumber: "CIN: U67190MH2020PTC123456",
   },
-  
+
   // Additional Metadata
   metadata: {
     keywords: ["IPO", "investment", "stock market", "India", "trading", "financial tools"],
@@ -69,7 +65,7 @@ export const siteConfig = {
     language: "en-IN",
     currency: "INR",
   },
-  
+
   // Statistics (for homepage/about page)
   stats: {
     totalUsers: "50,000+",
@@ -77,7 +73,7 @@ export const siteConfig = {
     accuracy: "99.9%",
     foundedYear: "2020",
   },
-  
+
   // Feature Flags (for enabling/disabling features)
   features: {
     newsletter: true,
@@ -85,7 +81,7 @@ export const siteConfig = {
     notifications: true,
     calculator: true,
   },
-  
+
   // Legal Links
   legal: {
     privacyPolicy: "/privacy-policy",

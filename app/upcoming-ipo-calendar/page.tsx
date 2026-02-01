@@ -17,7 +17,7 @@ import {
 import OtherInvestmentOptionWithDemat from "@/components/OtherInvestmentOptionWithDemat";
 
 interface IPO {
-  ipo_name:String,
+  ipo_name: string
   title: string
   slug: string
   ipo_type: string | null
@@ -107,11 +107,6 @@ function extractPriceBand(priceBandText: string): { low: number; high: number } 
   const low = parseFloat(matches[1].replace(/,/g, ""))
   const high = parseFloat(matches[2].replace(/,/g, ""))
   return { low, high }
-}
-
-function formatPriceBand(low: number, high: number): string {
-  if (!low && !high) return "N/A"
-  return `₹${low.toLocaleString("en-IN")} - ₹${high.toLocaleString("en-IN")}`
 }
 
 export default async function IPOCalendarPage({ searchParams }: PageProps) {
@@ -311,21 +306,21 @@ export default async function IPOCalendarPage({ searchParams }: PageProps) {
               <div className="text-purple-200 text-sm mt-1">Growth opportunities</div>
             </div>
 
-         <div className="group bg-gradient-to-br from-orange-500 to-red-600 p-6 rounded-2xl shadow-xl text-white transform hover:scale-105 transition-all duration-300">
-  <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl mb-4 inline-flex items-center">
-    <DollarSign className="h-6 w-6 text-white mr-2" />
-    {/* Optionally, you can keep this icon only or remove this entire div if you want */}
-  </div>
+            <div className="group bg-gradient-to-br from-orange-500 to-red-600 p-6 rounded-2xl shadow-xl text-white transform hover:scale-105 transition-all duration-300">
+              <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl mb-4 inline-flex items-center">
+                <DollarSign className="h-6 w-6 text-white mr-2" />
+                {/* Optionally, you can keep this icon only or remove this entire div if you want */}
+              </div>
 
-  <Link
-    href="https://zerodha.com/?c=QT4498&s=CONSOLE"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="text-orange-100 text-lg font-medium hover:underline inline-block"
-  >
-    Open Demat with Zerodha
-  </Link>
-</div>
+              <Link
+                href="https://zerodha.com/?c=QT4498&s=CONSOLE"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-orange-100 text-lg font-medium hover:underline inline-block"
+              >
+                Open Demat with Zerodha
+              </Link>
+            </div>
           </div>
 
           {/* Enhanced Table Container */}
@@ -342,129 +337,129 @@ export default async function IPOCalendarPage({ searchParams }: PageProps) {
             </div>
 
             {/* Enhanced Table */}
-         <div className="overflow-x-auto">
-      {ipos.length > 0 ? (
-        <table className="w-full">
-          <thead className="bg-gradient-to-r from-gray-50 to-slate-100">
-            <tr>
-              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                Company Details
-              </th>
-              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                IPO Type
-              </th>
-              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                Timeline
-              </th>
-              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                Price Band
-              </th>
-              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                Investment
-              </th>
-              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                Exchange
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-100">
-            {ipos.map((ipo) => {
-              const { low, high } = extractPriceBand(ipo.price_band_text || "")
-              const lotSize = parseInt(ipo.lot_size_text || "1") || 1
+            <div className="overflow-x-auto">
+              {ipos.length > 0 ? (
+                <table className="w-full">
+                  <thead className="bg-gradient-to-r from-gray-50 to-slate-100">
+                    <tr>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                        Company Details
+                      </th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                        IPO Type
+                      </th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                        Timeline
+                      </th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                        Price Band
+                      </th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                        Investment
+                      </th>
+                      <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                        Exchange
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-100">
+                    {ipos.map((ipo) => {
+                      const { low, high } = extractPriceBand(ipo.price_band_text || "")
+                      const lotSize = parseInt(ipo.lot_size_text || "1") || 1
 
-              return (
-                <tr
-                  key={ipo.slug}
-                  className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-300 group"
-                >
-                  {/* Company Details */}
-                  <td className="px-6 py-6">
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold text-lg">
-                        {ipo.title.charAt(0)}
-                      </div>
-                      <div className="ml-4">
-                        <Link
-                          href={`/ipo/${ipo.slug}`}
-                          className="text-lg font-semibold text-gray-900 hover:text-blue-600 transition-colors group-hover:text-blue-700"
+                      return (
+                        <tr
+                          key={ipo.slug}
+                          className="hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-300 group"
                         >
-                          {ipo.ipo_name}
-                          <ArrowRight className="inline h-4 w-4 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" />
-                        </Link>
-                        <div className="flex items-center mt-1">
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800">
-                            {ipo.issue_type || "N/A"}
-                          </span>
-                          <span className="ml-2 text-sm text-gray-500">{ipo.lot_size_text}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </td>
+                          {/* Company Details */}
+                          <td className="px-6 py-6">
+                            <div className="flex items-center">
+                              <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center text-white font-bold text-lg">
+                                {ipo.title.charAt(0)}
+                              </div>
+                              <div className="ml-4">
+                                <Link
+                                  href={`/ipo/${ipo.slug}`}
+                                  className="text-lg font-semibold text-gray-900 hover:text-blue-600 transition-colors group-hover:text-blue-700"
+                                >
+                                  {ipo.ipo_name}
+                                  <ArrowRight className="inline h-4 w-4 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                </Link>
+                                <div className="flex items-center mt-1">
+                                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800">
+                                    {ipo.issue_type || "N/A"}
+                                  </span>
+                                  <span className="ml-2 text-sm text-gray-500">{ipo.lot_size_text}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </td>
 
-                  {/* IPO Type */}
-                  <td className="px-6 py-6">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-green-100 to-emerald-100 text-green-800">
-                      {ipo.ipo_type || "N/A"}
-                    </span>
-                  </td>
+                          {/* IPO Type */}
+                          <td className="px-6 py-6">
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-green-100 to-emerald-100 text-green-800">
+                              {ipo.ipo_type || "N/A"}
+                            </span>
+                          </td>
 
-                  {/* Timeline */}
-                  <td className="px-6 py-6">
-                    <div className="space-y-2">
-                      <div className="flex items-center text-sm">
-                        <Calendar className="h-4 w-4 text-green-500 mr-2" />
-                        <span className="font-medium text-gray-900">Opens:</span>
-                        <span className="ml-2 text-green-600 font-semibold">
-                          {formatDate(ipo.timeline.open_date || ipo.published_on)}
-                        </span>
-                      </div>
-                      <div className="flex items-center text-sm">
-                        <Calendar className="h-4 w-4 text-red-500 mr-2" />
-                        <span className="font-medium text-gray-900">Closes:</span>
-                        <span className="ml-2 text-red-600 font-semibold">
-                          {formatDate(ipo.timeline.close_date || ipo.published_on)}
-                        </span>
-                      </div>
-                    </div>
-                  </td>
+                          {/* Timeline */}
+                          <td className="px-6 py-6">
+                            <div className="space-y-2">
+                              <div className="flex items-center text-sm">
+                                <Calendar className="h-4 w-4 text-green-500 mr-2" />
+                                <span className="font-medium text-gray-900">Opens:</span>
+                                <span className="ml-2 text-green-600 font-semibold">
+                                  {formatDate(ipo.timeline.open_date || ipo.published_on)}
+                                </span>
+                              </div>
+                              <div className="flex items-center text-sm">
+                                <Calendar className="h-4 w-4 text-red-500 mr-2" />
+                                <span className="font-medium text-gray-900">Closes:</span>
+                                <span className="ml-2 text-red-600 font-semibold">
+                                  {formatDate(ipo.timeline.close_date || ipo.published_on)}
+                                </span>
+                              </div>
+                            </div>
+                          </td>
 
-                  {/* Price Band */}
-                  <td className="px-6 py-6">
-                    <div className="text-lg font-bold text-gray-900 mb-1">{`₹${low.toLocaleString()} - ₹${high.toLocaleString()}`}</div>
-                    <div className="text-sm text-gray-500">Price Range</div>
-                  </td>
+                          {/* Price Band */}
+                          <td className="px-6 py-6">
+                            <div className="text-lg font-bold text-gray-900 mb-1">{`₹${low.toLocaleString()} - ₹${high.toLocaleString()}`}</div>
+                            <div className="text-sm text-gray-500">Price Range</div>
+                          </td>
 
-                  {/* Investment */}
-                  <td className="px-6 py-6">
-                    <div className="text-lg font-bold text-purple-600 mb-1">{lotSize}</div>
-                    <div className="text-sm text-gray-500">Lot Size</div>
-                    <div className="text-xs text-gray-400 mt-1">
-                      Min: ₹{(high * lotSize).toLocaleString("en-IN")}
-                    </div>
-                  </td>
+                          {/* Investment */}
+                          <td className="px-6 py-6">
+                            <div className="text-lg font-bold text-purple-600 mb-1">{lotSize}</div>
+                            <div className="text-sm text-gray-500">Lot Size</div>
+                            <div className="text-xs text-gray-400 mt-1">
+                              Min: ₹{(high * lotSize).toLocaleString("en-IN")}
+                            </div>
+                          </td>
 
-                  {/* Exchange */}
-                  <td className="px-6 py-6">
-                    <span className="inline-flex items-center px-3 py-2 rounded-full text-sm font-semibold bg-gradient-to-r from-emerald-100 to-teal-100 text-emerald-800 border border-emerald-200">
-                      <Building2 className="h-4 w-4 mr-1" />
-                      {ipo.listing.join(", ")}
-                    </span>
-                  </td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-      ) : (
-        <div className="text-center py-16">
-          <div className="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
-            <TrendingUp className="h-12 w-12 text-gray-400" />
-          </div>
-          <div className="text-gray-500 text-xl mb-2">No IPOs found</div>
-          <p className="text-gray-400">{search ? `No IPOs match "${search}"` : "No IPOs available at the moment"}</p>
-        </div>
-      )}
-    </div>
+                          {/* Exchange */}
+                          <td className="px-6 py-6">
+                            <span className="inline-flex items-center px-3 py-2 rounded-full text-sm font-semibold bg-gradient-to-r from-emerald-100 to-teal-100 text-emerald-800 border border-emerald-200">
+                              <Building2 className="h-4 w-4 mr-1" />
+                              {ipo.listing.join(", ")}
+                            </span>
+                          </td>
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
+              ) : (
+                <div className="text-center py-16">
+                  <div className="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <TrendingUp className="h-12 w-12 text-gray-400" />
+                  </div>
+                  <div className="text-gray-500 text-xl mb-2">No IPOs found</div>
+                  <p className="text-gray-400">{search ? `No IPOs match "${search}"` : "No IPOs available at the moment"}</p>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Comprehensive IPO Information Section */}
@@ -595,7 +590,7 @@ export default async function IPOCalendarPage({ searchParams }: PageProps) {
           </div>
 
           {/* Bottom Navigation */}
-        <OtherInvestmentOptionWithDemat />
+          <OtherInvestmentOptionWithDemat />
         </div>
 
         {/* FAQ Section */}

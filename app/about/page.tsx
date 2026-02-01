@@ -1,7 +1,8 @@
 import type { Metadata } from "next"
-import { CheckCircle, Users, TrendingUp, Shield, Clock, Award, Mail, Phone, MapPin, Linkedin, Twitter, Instagram, Youtube, Facebook } from "lucide-react"
+import { CheckCircle, Users, TrendingUp, Shield, Mail, Phone, MapPin, Linkedin, Twitter, Instagram, Youtube, Facebook } from "lucide-react"
 import Link from "next/link"
 import { siteConfig, getSocialLinks, getFullAddress } from "@/config/config"
+import gmpprovider from "@/config/gmpprovider"
 
 export const metadata: Metadata = {
   title: `About Us - ${siteConfig.siteName} | Leading IPO & Stock Market Information Platform`,
@@ -19,14 +20,14 @@ export default function AboutPage() {
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
               About{" "}
               <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                {siteConfig.siteName}
+                {gmpprovider.websiteName}
               </span>
             </h1>
             <p className="text-xl text-gray-600 leading-relaxed">
               {siteConfig.siteDescription}
             </p>
             <p className="text-lg text-blue-600 font-medium mt-4">
-              {siteConfig.siteTagline}
+              {gmpprovider.tagName}
             </p>
           </div>
         </div>
@@ -252,7 +253,7 @@ export default function AboutPage() {
               {/* Contact Information */}
               <div className="space-y-6">
                 <h3 className="text-2xl font-semibold text-gray-900 mb-6">Contact Information</h3>
-                
+
                 <div className="flex items-start space-x-4">
                   <div className="bg-blue-100 p-3 rounded-lg">
                     <Mail className="h-6 w-6 text-blue-600" />
@@ -260,7 +261,7 @@ export default function AboutPage() {
                   <div>
                     <h4 className="font-semibold text-gray-900 mb-1">Email</h4>
                     <a href={`mailto:${siteConfig.contactEmail}`} className="text-blue-600 hover:text-blue-700">
-                      {siteConfig.contactEmail}
+                      {gmpprovider.contact.email}
                     </a>
                     <br />
                     <a href={`mailto:${siteConfig.supportEmail}`} className="text-blue-600 hover:text-blue-700 text-sm">
@@ -300,7 +301,7 @@ export default function AboutPage() {
                 <p className="text-gray-600 mb-6">
                   Stay updated with the latest IPO news, market insights, and investment tips by following us on social media.
                 </p>
-                
+
                 <div className="space-y-4">
                   {getSocialLinks().map((social) => {
                     // Map platform names to icons
@@ -311,9 +312,9 @@ export default function AboutPage() {
                       Instagram: Instagram,
                       Youtube: Youtube,
                     }
-                    
+
                     const Icon = iconMap[social.name] || Users
-                    
+
                     // Map platform names to colors
                     const colorMap: { [key: string]: string } = {
                       Twitter: "text-blue-400 bg-blue-50 hover:bg-blue-100",
@@ -322,9 +323,9 @@ export default function AboutPage() {
                       Instagram: "text-pink-600 bg-pink-50 hover:bg-pink-100",
                       Youtube: "text-red-600 bg-red-50 hover:bg-red-100",
                     }
-                    
+
                     const colorClass = colorMap[social.name] || "text-gray-600 bg-gray-50 hover:bg-gray-100"
-                    
+
                     return (
                       <a
                         key={social.platform}

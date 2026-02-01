@@ -3,7 +3,6 @@ import { CTAButton } from "@/components/cta-button"
 import {
   TrendingUp,
   TrendingDown,
-  Calendar,
   MapPin,
   Flame,
   Info,

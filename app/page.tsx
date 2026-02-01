@@ -2,6 +2,8 @@ import Link from "next/link"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { HomeBlogSection } from "@/components/home-blog-section"
+import { AllotmentWidget } from "@/components/allotment-widget"
 
 export default function HomePage() {
   return (
@@ -69,7 +71,39 @@ export default function HomePage() {
       </section>
 
       {/* Live Market Updates */}
-      <section className="py-16 bg-white">
+      <section className="py-12 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col lg:flex-row gap-12 items-center">
+            <div className="w-full lg:w-1/2">
+              <AllotmentWidget />
+            </div>
+            <div className="w-full lg:w-1/2">
+              <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium mb-6">
+                <span className="h-4 w-4 animate-pulse rounded-full bg-blue-600"></span>
+                Live Allotment Out
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">Did you get the allotment?</h2>
+              <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+                Check your IPO allotment status instantly. Enter your PAN number to verify if you have received shares in the latest successful listings like <strong>Oswal Pumps</strong> and <strong>Tech Innovations</strong>.
+              </p>
+
+              <div className="grid grid-cols-2 gap-6">
+                <div className="p-4 bg-gray-50 rounded-xl">
+                  <div className="text-3xl font-bold text-blue-600 mb-1">2M+</div>
+                  <div className="text-sm text-gray-600">Checks processed</div>
+                </div>
+                <div className="p-4 bg-gray-50 rounded-xl">
+                  <div className="text-3xl font-bold text-green-600 mb-1">0s</div>
+                  <div className="text-sm text-gray-600">Wait time</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Live Market Updates (Original) */}
+      <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Live Market Updates</h2>
@@ -323,152 +357,31 @@ export default function HomePage() {
               </div>
             </Link>
           </div>
-    <div className="text-center mt-8">
-  <Button
-    asChild
-    size="lg"
-    variant="outline"
-    className="px-8 py-3 text-gray-800 border-gray-300 hover:bg-gray-100"
-  >
-       <Link
-      href="/calculators"
-      className="inline-flex items-center px-6 py-3 rounded-xl border border-gray-300 bg-white shadow-sm hover:bg-gray-100 hover:shadow-md transition-all duration-200 ease-in-out text-gray-800 font-medium text-lg"
-    >
-      View All Calculators
-      <span className="ml-2 text-xl transform transition-transform duration-200 group-hover:translate-x-1">
-        →
-      </span>
-    </Link>
-  </Button>
-</div>
+          <div className="text-center mt-8">
+            <Button
+              asChild
+              size="lg"
+              variant="outline"
+              className="px-8 py-3 text-gray-800 border-gray-300 hover:bg-gray-100"
+            >
+              <Link
+                href="/calculators"
+                className="inline-flex items-center px-6 py-3 rounded-xl border border-gray-300 bg-white shadow-sm hover:bg-gray-100 hover:shadow-md transition-all duration-200 ease-in-out text-gray-800 font-medium text-lg"
+              >
+                View All Calculators
+                <span className="ml-2 text-xl transform transition-transform duration-200 group-hover:translate-x-1">
+                  →
+                </span>
+              </Link>
+            </Button>
+          </div>
 
-   
+
         </div>
       </section>
 
       {/* Latest Blog Posts Section */}
-      {/* <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Latest Market Insights</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Stay updated with expert analysis, market trends, and investment strategies
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-           
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-              <div className="relative h-48 w-full overflow-hidden rounded-t-lg">
-                <div className="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-                  <span className="text-white text-4xl">📊</span>
-                </div>
-              </div>
-              <CardContent className="p-6">
-                <div className="flex items-center mb-3">
-                  <Badge className="bg-blue-100 text-blue-800 text-xs">Grey Market Premium</Badge>
-                  <span className="text-xs text-gray-500 ml-auto">June 10, 2025</span>
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2">
-                  Understanding IPO Grey Market Premium: Complete Guide for 2025
-                </h3>
-                <p className="text-gray-600 mb-4 line-clamp-3">
-                  Explore the concept of Grey Market Premium in IPOs and how it impacts listing day performance and
-                  investor decisions in the current market scenario.
-                </p>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-500">By Rahul Sharma</span>
-                  <Link
-                    href="/blog/understanding-ipo-grey-market-premium"
-                    className="text-blue-600 font-medium hover:text-blue-800 transition-colors group"
-                  >
-                    Read More{" "}
-                    <span className="ml-1 group-hover:translate-x-1 transition-transform inline-block">→</span>
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
-
-          
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-              <div className="relative h-48 w-full overflow-hidden rounded-t-lg">
-                <div className="w-full h-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
-                  <span className="text-white text-4xl">🚀</span>
-                </div>
-              </div>
-              <CardContent className="p-6">
-                <div className="flex items-center mb-3">
-                  <Badge className="bg-green-100 text-green-800 text-xs">SME IPOs</Badge>
-                  <span className="text-xs text-gray-500 ml-auto">June 8, 2025</span>
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2">
-                  Top 10 SME IPOs to Watch in 2025: High Growth Potential
-                </h3>
-                <p className="text-gray-600 mb-4 line-clamp-3">
-                  Discover the most promising Small and Medium Enterprise IPOs coming to the market this year with
-                  potential for significant returns and growth.
-                </p>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-500">By Priya Patel</span>
-                  <Link
-                    href="/blog/top-sme-ipos-2025"
-                    className="text-blue-600 font-medium hover:text-blue-800 transition-colors group"
-                  >
-                    Read More{" "}
-                    <span className="ml-1 group-hover:translate-x-1 transition-transform inline-block">→</span>
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
-
-         
-            <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-              <div className="relative h-48 w-full overflow-hidden rounded-t-lg">
-                <div className="w-full h-full bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center">
-                  <span className="text-white text-4xl">📈</span>
-                </div>
-              </div>
-              <CardContent className="p-6">
-                <div className="flex items-center mb-3">
-                  <Badge className="bg-orange-100 text-orange-800 text-xs">Market Analysis</Badge>
-                  <span className="text-xs text-gray-500 ml-auto">June 5, 2025</span>
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2">
-                  Q2 2025 IPO Market Outlook: Trends and Predictions
-                </h3>
-                <p className="text-gray-600 mb-4 line-clamp-3">
-                  Expert analysis on emerging trends in the Indian IPO market for Q2 2025, including sector-wise
-                  performance and investor sentiment analysis.
-                </p>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-500">By Vikram Malhotra</span>
-                  <Link
-                    href="/blog/q2-2025-ipo-market-outlook"
-                    className="text-blue-600 font-medium hover:text-blue-800 transition-colors group"
-                  >
-                    Read More{" "}
-                    <span className="ml-1 group-hover:translate-x-1 transition-transform inline-block">→</span>
-                  </Link>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-         <div className="text-center mt-8">
-  <Button
-    asChild
-    size="lg"
-    variant="outline"
-    className="px-8 py-3 text-gray-800 border-gray-300 hover:bg-gray-100 hover:text-black"
-  >
-    <Link href="/blog">
-      View All Articles <span className="ml-2">→</span>
-    </Link>
-  </Button>
-</div>
-
-        </div>
-      </section> */}
+      <HomeBlogSection />
 
       {/* Features Grid */}
       <section className="py-16 bg-gray-50">

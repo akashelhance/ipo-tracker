@@ -5,7 +5,6 @@ import {
   TrendingDown,
   Calendar,
   MapPin,
-  Fuel,
   Info,
   Target,
   Truck,

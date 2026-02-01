@@ -6,10 +6,8 @@ import {
   TrendingDown,
   Calendar,
   MapPin,
-  Star,
   Info,
   Target,
-  DollarSign,
   Award,
   Sparkles,
 } from "lucide-react"
