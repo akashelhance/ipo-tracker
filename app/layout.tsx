@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { siteConfig } from "@/config/config"
 import gmpprovider from "@/config/gmpprovider"
+import OrganizationSchema from "@/components/organization-schema"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -104,6 +105,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
       </head>
       <body className={inter.className} suppressHydrationWarning>
+        <OrganizationSchema />
         <div className="relative flex min-h-screen flex-col">
           <SiteHeader />
           <main className="flex-1">{children}</main>

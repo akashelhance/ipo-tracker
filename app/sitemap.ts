@@ -1,7 +1,11 @@
 import type { MetadataRoute } from "next"
+import { ipos } from "@/lib/ipo-data"
+import { buybacks } from "@/lib/buyback-data"
+import { brokers } from "@/lib/broker-data"
+import { getAllBlogs } from "@/lib/blog-data"
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://yoursite.com"
+  const baseUrl = "https://yoursite.com" // Update this with your actual domain
 
   // Static pages
   const staticPages = [
@@ -33,42 +37,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/disclaimer",
     "/market-holidays",
     "/glossary",
-    "/sitemap",
   ]
 
-  // Sample IPO slugs (replace with actual data)
-  const ipoSlugs = [
-    "oswal-pumps",
-    "techcorp-solutions",
-    "green-energy-ltd",
-    "digital-innovations",
-    "healthcare-ventures",
-    "fintech-dynamics",
-  ]
-
-  // Sample buyback slugs (replace with actual data)
-  const buybackSlugs = ["infosys", "tcs", "wipro", "hcl-technologies", "tech-mahindra", "bharti-airtel"]
-
-  // Sample broker slugs (replace with actual data)
-  const brokerSlugs = [
-    "zerodha",
-    "upstox",
-    "angel-one",
-    "icici-direct",
-    "hdfc-securities",
-    "groww",
-    "5paisa",
-    "sharekhan",
-  ]
-
-  // Sample blog post slugs (replace with actual data)
-  const blogSlugs = [
-    "how-to-apply-for-ipo-in-india",
-    "understanding-ipo-grey-market-premium",
-    "best-investment-calculators-2025",
-    "share-buyback-vs-dividends",
-    "choosing-right-stock-broker",
-  ]
+  const blogs = getAllBlogs()
 
   const sitemap: MetadataRoute.Sitemap = [
     // Static pages
@@ -80,33 +51,33 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
 
     // IPO detail pages
-    ...ipoSlugs.map((slug) => ({
-      url: `${baseUrl}/ipo/${slug}`,
-      lastModified: new Date(),
+    ...ipos.map((ipo) => ({
+      url: `${baseUrl}/ipo/${ipo.slug}`,
+      lastModified: new Date(), // In a real app, use ipo.updatedAt
       changeFrequency: "daily" as const,
       priority: 0.9,
     })),
 
     // Buyback detail pages
-    ...buybackSlugs.map((slug) => ({
-      url: `${baseUrl}/buyback/${slug}`,
+    ...buybacks.map((bb) => ({
+      url: `${baseUrl}/buyback/${bb.slug}`,
       lastModified: new Date(),
       changeFrequency: "weekly" as const,
       priority: 0.7,
     })),
 
     // Broker detail pages
-    ...brokerSlugs.map((slug) => ({
-      url: `${baseUrl}/broker/${slug}`,
+    ...brokers.map((broker) => ({
+      url: `${baseUrl}/broker/${broker.slug}`,
       lastModified: new Date(),
       changeFrequency: "monthly" as const,
       priority: 0.6,
     })),
 
     // Blog post pages
-    ...blogSlugs.map((slug) => ({
-      url: `${baseUrl}/blog/${slug}`,
-      lastModified: new Date(),
+    ...blogs.map((blog) => ({
+      url: `${baseUrl}/blog/${blog.slug}`,
+      lastModified: new Date(blog.date),
       changeFrequency: "monthly" as const,
       priority: 0.5,
     })),
